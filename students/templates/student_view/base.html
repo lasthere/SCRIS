@@ -1,0 +1,94 @@
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Student Curriculum Residency Informations System</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/Palompon_Institute_of_Technology.png' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/student.css' %}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+   <style>
+    .scroll::-webkit-scrollbar {
+          display: none;
+    }
+        .scroll {
+          height: 450px;
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+    }
+  </style>
+  <div class="container-fluid">
+    <div class="banner" style="background-color:silver ;" >
+      <img src="{% static 'images/logomaster.png' %}" >
+    </div>
+  </div>
+<div class="container-fluid">
+<div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            <div class="border-end "  id="sidebar-wrapper">
+                <div class="sidebar-heading border-bottom" style="background-color:#0096FF;" >Student</div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Events</a>
+                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Profile</a>
+                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Status</a>
+                </div>
+            </div>
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+                    <div class="container-fluid">
+                        <button class="btn btn-primary" id="sidebarToggle"><i class="fa fa-bars"></i></button>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                </nav>
+                <!-- Page content-->
+                  <div class="scroll container-fluid ">
+                    {% block body %}
+                    {% endblock %}
+
+                      <div class="text-center" style="margin-top:1%;">
+                        <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
+                      </div>
+            
+                    
+                  </div>  
+                
+            </div>
+
+        </div>
+        
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'PR_kenth/popup.js' %}"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', event => {
+
+          // Toggle the side navigation
+          const sidebarToggle = document.body.querySelector('#sidebarToggle');
+          if (sidebarToggle) {
+              // Uncomment Below to persist sidebar toggle between refreshes
+              // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+              //     document.body.classList.toggle('sb-sidenav-toggled');
+              // }
+              sidebarToggle.addEventListener('click', event => {
+                  event.preventDefault();
+                  document.body.classList.toggle('sb-sidenav-toggled');
+                  localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+              });
+          }
+
+      });
+    </script>
+    </div>
+
+    
+
+
+  </body>
+</html>

@@ -1,0 +1,125 @@
+{% extends "PA_Views/base.html" %}
+
+{% block body %}
+<h3 class="m-4">Program Adviser</h3>
+<div class="row">
+  <div class="col-12">
+    {% if pas %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> Program Adviser Account
+        <a style="float: right;"href="{% url 'add_pa' %}">
+            <i class="fa-solid fa-plus fa-lg "></i> Add Program Adviser
+          </a>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Updated</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pa in pas %}
+                  <tr>
+                    <td>{{ pa.first_name }}</td>
+                    <td>{{ pa.last_name }}</td>
+                    <td>{{ pa.email}}</td>
+                    <td>{{ pa.created_at }}</td>
+                    <td>{{ pa.updated_at}}</td>
+                    <td>
+                      <button type="button" class="btn btn-success me-1" href="{% url 'view_pa' pa.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{pa.id}}">
+                        <i class="fa-solid fa-circle-info fa-lg"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{pa.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                Program Advisor: {{ pa.first_name }} {{ pa.last_name }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>First Name: <strong>{{ pa.first_name }}</strong></li>
+                                <li>Last Name: <strong>{{ pa.last_name }}</strong></li>
+                                <li>Email: <strong>{{ pa.email }}</strong></li>
+                                <li>Created: <strong>{{ pa.created_at }}</strong></li>
+                                <li>Updated: <strong>{{ pa.updated_at }}</strong></li>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a class="btn btn-warning me-1" href="{% url 'edit_pa' pa.id %}">
+                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      </a>
+
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{pa.id}}">
+                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                      </button>
+
+                      <!-- Modal - Delete Student -->
+                      <div class="modal" id="delete{{pa.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                Program Advisor: {{ pa.first_name }} {{ pa.last_name }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Are you sure you want to delete this account?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <form action="{% url 'delete_pa' pa.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-primary" value="Delete">
+                              </form>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </p>
+      </div>
+    </div>
+    {% else %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> Program Adviser Account
+          <a style="float: right;"href="{% url 'add_pa' %}">
+            <i class="fa-solid fa-plus fa-lg "></i> Add Program Adviser
+          </a>
+
+      </div>  
+      <h5 class="alert alert-primary ms-4 me-4">No Program Adviser Found</h5>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

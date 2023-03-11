@@ -1,0 +1,695 @@
+{% extends "student_view/base.html" %}
+
+
+{% block body %}
+
+
+<style >
+    
+/* The Modal (background) */
+.modal {
+
+    display: none; /* Hidden by default */
+    osition: fixed; /* Stay in place */
+    z-index: ; /* Sit on top */
+     /* Location of the box */
+    top:50%;
+    left:75%;
+    width: 23%; /* Full width */
+    height: 25%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+             
+}
+.modal .active {
+    top:75%;
+}
+
+/* Modal Content */
+          
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 0px solid #888;
+    width: 80%;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.3s
+              
+}
+
+ /* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 0px 10px;
+    background-color: #5cb85c;
+    font-size:30px;
+    text-align: center;
+}
+.modal .modal-header h1{
+    padding: 10px 10px;
+    background-color: #5cb85c;
+    font-size:40px;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 10px 10px;
+}
+
+.modal .modal-body p {
+    padding: 10px 10px;
+    font-size:20px;
+    text-align: justify-all;
+}
+
+.modal-footer {
+    padding: 5px 10px;
+    background-color: #5cb85c;
+    color: white;
+}
+.red {
+      background-color: #FA8072;
+}
+.blue {
+      background-color: #87CEFA;
+}
+.orange {
+      background-color: peachpuff;
+}
+</style>
+
+<body>
+    <div class="col-12" style="border-radius: 15px;">
+      <div class="row">
+        <div class="card bg-light" >
+            <table  class="table">
+                <tr bgcolor="#3EEB8F">
+                  <td colspan="4" height="25"><div align="center"><font color=black><strong>-
+                      STUDENT CURRICULUM RESIDENCY INFORMATION-</strong></font></div></td>
+                </tr>
+
+
+                <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student ID: <strong>19-0144-753</strong></td>
+                  <td width="49%" valign="middle">Year: <strong>4</strong></td>
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student name: <strong>{{ user.first_name }} {{ user.last_name }}</strong></td>
+                  <td width="49%" valign="middle">Status: <strong>REGULAR</strong></td>
+                </tr>
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">  GWA: <strong>2.0</strong></td>
+                  <td width="49%" valign="middle">Total units taken: <strong>132.0</strong></td>
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">  Course/Major: <strong>Bachelor of Science in Information Technology</strong><strong>{{course_id}}</strong></td>
+                  <td height="25">  Total units required for this course :<strong> 156.0</strong></td>
+                </tr>
+
+                <tr>
+                  <td height="25">&nbsp;</td>
+                  <td height="25">Curriculum Year :<strong> 2020 - 2021</strong></td>
+                  <td height="25">&nbsp;</td>
+                  <td height="25">&nbsp;</td>
+                </tr>
+               
+              <table id='trans_separate' width="100%" bgcolor="#FFFFFF">
+        
+        
+                <tbody>
+                    <tr> 
+                      <td width="1%">&nbsp;</td>
+                      <td colspan="11"><strong><u>1st Year, 1st Sem</u></strong></td>
+                    </tr>
+                    
+                    <tr> 
+                      <td rowspan="2">&nbsp;</td>
+                      <td rowspan="2" height="19"><div align="left"><font size="1"><strong>SUBJECT 
+                          CODE</strong></font></div></td>
+                      <td rowspan="2"><div align="left"><font size="1"><strong>SUBJECT TITLE </strong></font></div></td>
+
+                      <td colspan="2"><div align="center"><font size="1"><strong>HOURS</strong></font></div></td>
+
+                      <td colspan="2"><div align="center"><font size="1"><strong>UNITS</strong></font></div></td>
+
+
+                      <td rowspan="2"><div align="left"><font size="1"><strong>REMARKS</strong></font></div></td>
+
+                      <td rowspan="2"><div align="left"><font size="1"><strong>Prerequisite</strong></font></div></td>
+
+
+                    </tr>
+                    <tr> 
+
+                      <td width="7%"><div align="center"><font size="1"><strong>LEC.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LAB.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LEC.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LAB.</strong></font></div></td>
+
+                    </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Passed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Passed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Conditional</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Conditional</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Failed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Failed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+                       
+                      <tr> 
+                      <td>&nbsp;</td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      </tr>
+                      <tr> 
+                        <td style= "display:none" >Passed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Passed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Conditional</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Conditional</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Failed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Failed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+                       
+                      <tr> 
+                      <td>&nbsp;</td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      </tr>
+                      <tr> 
+                        <td style= "display:none" >Passed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Passed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Conditional</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Conditional</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Failed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Failed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+                       
+                      <tr> 
+                      <td>&nbsp;</td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      </tr>
+                      <tr> 
+                        <td style= "display:none" >Passed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Passed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Conditional</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Conditional</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+
+                      <tr> 
+                        <td style= "display:none" >Failed</td>
+                        <td></td>
+                        <td width="5%" height="19">GEC 2</td>
+                        <td width="10%">Understanding the Self</td>
+
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center" >0.0</td>
+                        <td width="3%" align="center">3.0</td>
+                        <td width="3%" align="center">0.0</td>
+
+                        <td width="3%" align="left">Failed</td>
+                        <td width="3%" align="left"> <button class="modal-button" href="#myModal1">Cl</button></td>
+
+                            <!-- The Modal -->
+                            <div id="myModal1" class="modal">
+
+                              <!-- Modal content -->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1>Prerequisite</h1>
+                                  <span class="close">x</span>
+                                </div>
+                                <div class="modal-body">
+                                  <p>IT 101, IT 106(LAB), IT 101, IT 101(LAB), IT 101, IT 102(LAB)</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                              </div>
+
+                            </div>
+                      </tr>
+                       
+                      <tr> 
+                      <td>&nbsp;</td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      </tr>
+              
+
+              </tbody></table>
+
+    </div>
+</div>
+    </div>
+</body>
+    
+
+<!-- JS for Button Pssed -->
+ <script >
+      
+              // Get the button that opens the modal
+        var btn = document.querySelectorAll("button.modal-button");
+
+        // All page modals
+        var modals = document.querySelectorAll('.modal');
+
+        // Get the <span> element that closes the modal
+        var spans = document.getElementsByClassName("close");
+
+        // When the user clicks the button, open the modal
+        for (var i = 0; i < btn.length; i++) {
+         btn[i].onclick = function(e) {
+            e.preventDefault();
+            modal = document.querySelector(e.target.getAttribute("href"));
+            modal.style.display = "block";
+         }
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        for (var i = 0; i < spans.length; i++) {
+         spans[i].onclick = function() {
+            for (var index in modals) {
+              if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+            }
+         }
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+             for (var index in modals) {
+              if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+             }
+            }
+        }
+       //coloring grades
+        var rows = document.getElementById("trans_separate").getElementsByTagName("tbody")
+                      [0].getElementsByTagName("tr");
+
+                        // loops through each rtd
+                        for (i = 0; i < rows.length; i++) {row = rows[i].getElementsByTagName('td');
+                                if (row[0].innerHTML == "Failed")
+                                    rows[i].className = "red";
+                                if (row[0].innerHTML == "Conditional")
+                                    rows[i].className = "orange";
+                                if (row[0].innerHTML == "Credit")
+                                    rows[i].className = "blue";
+
+                                 if (row[0].innerHTML == "Passed" )
+                                    rows[i].className = "blue";
+
+                                if (row[0].innerHTML == "Inc" )
+                                    rows[i].className = "orange";          
+                     }
+
+       
+
+
+ //warning prompt
+              
+        var rows = document.getElementById("trans_separate").getElementsByTagName("tbody")
+                            [0].getElementsByTagName("tr");
+
+                              // loops through each rtd
+
+                              for (i = 0; i < rows.length; i++) {row = rows[i].getElementsByTagName("td");
+                                      
+                                      if (row[0].innerHTML == ("Failed" || "Inc")) {
+                                        if (alert("Check for Failed or Incomplete remarks!") == true){
+                                          break ;
+                                        }else{
+                                          event.preventDefault();
+                                        }
+                                      }
+                                      }    
+
+
+    </script>
+
+{% endblock %}
+
+{% block custom_js %}
+
+{% endblock custom_js %}
