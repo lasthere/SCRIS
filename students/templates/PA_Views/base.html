@@ -76,6 +76,15 @@
                     <div class="container-fluid">
                         <button class="btn btn-success" id="Toggle"><i class="fa fa-bars"></i></button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <div class="row">
+                        {% if user.is_authenticated %}
+                          <form action="{% url 'logout' %}" method="post">
+                          {% csrf_token %}
+                          <button class="btn btn-danger" type="submit">Logout</button>
+                        </form>
+                        {% endif %}
+                        </div>
+
                 </nav>
                 <!-- Page content-->
                   <div class="scroll container-fluid ">
@@ -96,7 +105,9 @@
     <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
 
  
-    <script src="{% static 'bootstrap.min.js' %}"></script>  
+    <!--<script src="{% static 'js/bootstrap.min.js' %}"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <script>
       window.addEventListener('DOMContentLoaded', event => {

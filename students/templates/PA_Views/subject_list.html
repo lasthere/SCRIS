@@ -34,7 +34,7 @@
               </thead>
               <tbody>
                 {% for subject in subs %}
-                  <tr>
+                  <tr class="clickable-row " data-href="{% url 'edit_subject' subject.id%}">
                     <td >{{ subject.subj_code }}</td>
                     <td >{{ subject.subj_name }}</td>
                     <td >{{ subject.subj_hr_lec }}</td>
@@ -82,10 +82,6 @@
                           </div>
                         </div>
                       </div>
-
-                      <a class="btn btn-warning me-1" href="{% url 'edit_subject' subject.id %}">
-                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
-                      </a>
 
                       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{subject.id}}">
                         <i class="fa-solid fa-trash-can fa-lg"></i>
@@ -140,4 +136,22 @@
     {% endif %}
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rows = document.querySelectorAll(".clickable-row");
+  rows.forEach(function(row) {
+    row.addEventListener("click", function(event) {
+      // Check if the click originated from the button or one of its children
+      if (event.target.closest("button")) {
+        return;
+      }
+      // Proceed with the original behavior
+      if (!row.classList.contains("exclude")) {
+        window.location.href = row.dataset.href;
+      }
+    });
+  });
+});
+</script>
 {% endblock %}

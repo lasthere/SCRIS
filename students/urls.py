@@ -2,11 +2,16 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-  path('', views.login, name='login'),
+  path('', views.alogin, name='login'),
+  path('logout/', views.logout_view, name='logout'),
+
+  path('hod_home/', views.hod_home, name='hod_home'),
 
   #pa
   path('doLogin/', views.doLogin, name="doLogin"),
   
+  path('home_pa/', views.home_pa, name='home_pa'),
+
   path('student/', views.index, name='index'),
   path('<int:id>', views.view_student, name='view_student'),
   path('add/', views.save_student, name='add'),
@@ -46,11 +51,13 @@ urlpatterns = [
 
 
   #ojt
-
+  path('home_ojt/', views.home_ojt, name='home_ojt'),
   path('ojt_index/', views.ojt_index, name='ojt_index'),
 
   #student
+  path('home_student/', views.home_student, name='home_student'),
   path('student_index/', views.student_index, name='student_index'),
+  path('students/year/<str:year_level>/', views.students_by_year_view, name='students_by_year'),
 
   #sending mail
   path('contact_form/',views.contact_form, name="contact_form"),

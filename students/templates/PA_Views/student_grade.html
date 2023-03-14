@@ -1,36 +1,166 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3>{{ student.user.first_name }}{{ student.user.last_name }}'s Grades</h3>
+<style >
+    
+.red {
+      background-color: #FA8072;
+}
+.blue {
+      background-color: #87CEFA;
+}
+.orange {
+      background-color: peachpuff;
+}
+</style>
 
-      <div class="card-body">
-        <p class="card-text">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Subject</th>
-                  <th scope="col">Score</th>
-                  <th scope="col">Status</th>
+    <div class="col-12" style="border-radius: 15px;">
+      <div class="row">
+        <div class="card bg-light" >
+            <table  class="table">
+                <tr bgcolor="#3EEB8F">
+                  
+                  <td colspan="4" height="25"><div align="center"><font color=black><strong>-
+                      STUDENT CURRICULUM RESIDENCY INFORMATION-</strong></font></div></td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for grade in grades %}
-                  <tr>
-                    <td>{{ grade.subject_id  }}</td>
-                    <td>{{ grade.subject_grade }}</td>
-                    <td>{{  grade.status }}</td>
-                  </tr>
-                   {% empty %}
-		            <tr>
-		                <td colspan="3">No grades available.</td>
-		            </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </p>
-      </div>
+
+
+                <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student ID: <strong>{{ student.user.username }} </strong></td>
+                  <td width="49%" valign="middle">Year: <strong>{{ student.year_level }}</strong></td>
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student name: <strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></td>
+                  <td width="49%" valign="middle">Status: <strong>REGULAR</strong></td>
+                </tr>
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">  GWA: <strong>2.0</strong></td>
+                  <td width="49%" valign="middle">Total units taken: <strong>132.0</strong></td>
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">  Course/Major: <strong>Bachelor of Science in Information Technology</strong><strong>{{course_id}}</strong></td>
+                  <td height="25">  Total units required for this course :<strong> 156.0</strong></td>
+                </tr>
+
+                <tr>
+                  <td height="25">&nbsp;</td>
+                  <td height="25">Curriculum Year :<strong> 2020 - 2021</strong></td>
+                  <td height="25">&nbsp;</td>
+                  <td height="25">&nbsp;</td>
+                </tr>
+               <div class="table-responsive">
+              <table class="table-light table-hover" width="100%" >
+                <thead>
+                  <tr> 
+                      <td width="1%">&nbsp;</td>
+                      <td colspan="11"><strong><u>1st Year, 1st Sem</u></strong></td>
+                    </tr>
+                    
+                    <tr> 
+                      <td rowspan="2">&nbsp;</td>
+                      <td rowspan="2" height="19"><div align="left"><font size="1"><strong>SUBJECT 
+                          CODE</strong></font></div></td>
+                      <td rowspan="2"><div align="left"><font size="1"><strong>SUBJECT TITLE </strong></font></div></td>
+
+                      <td colspan="2"><div align="center"><font size="1"><strong>HOURS</strong></font></div></td>
+
+                      <td colspan="2"><div align="center"><font size="1"><strong>UNITS</strong></font></div></td>
+
+
+                      <td rowspan="2"><div align="left"><font size="1"><strong>REMARKS</strong></font></div></td>
+
+                      <td rowspan="2"><div align="left"><font size="1"><strong>Prerequisite</strong></font></div></td>
+
+
+                    </tr>
+                    <tr> 
+
+                      <td width="7%"><div align="center"><font size="1"><strong>LEC.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LAB.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LEC.</strong></font></div></td>
+                      <td width="7%"><div align="center"><font size="1"><strong>LAB.</strong></font></div></td>
+
+                    </tr>
+                </thead>
+                      {% for grade in grades %}
+                      <tr class="{% if grade.status == 'passed' %}blue{% elif grade.status == 'failed' %}red{% else %}orange{% endif %}"> 
+                        <td style= "display:none" >{{  grade.status }}</td>
+                        <td></td>
+                        <td width="5%" height="19">{{ grade.subject_id.subj_code  }}</td>
+                        <td width="10%">{{ grade.subject_id.subj_name  }}</td>
+
+                        <td width="3%" align="center">{{ grade.subject_id.subj_hr_lec  }}</td>
+                        <td width="3%" align="center" >{{ grade.subject_id.subj_hr_lab  }}</td>
+                        <td width="3%" align="center">{{ grade.subject_id.subj_units_lec  }}</td>
+                        <td width="3%" align="center">{{ grade.subject_id.subj_units_lab  }}</td>
+
+                        <td width="3%" align="left">{{  grade.status }}</td>
+                        <td width="3%" align="left">
+                            <!-- The Modal -->
+                           <button type="button" class="btn btn-success me-1" href="{% url 'view_student' student.user.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{student.user.id}}">
+                        <i class="fa-solid fa-circle-info fa-lg"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{student.user.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                Prerequisite
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>Student Number: <strong>{{ student.user.username }}</strong></li>
+                                <li>First Name: <strong>{{ student.user.first_name }}</strong></li>
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </td>
+                        {% empty %}
+                      <tr>
+                          <td colspan="3">No grades available.</td>
+                      </tr>
+                      {% endfor %}
+
+                      <tr> 
+                      <td>&nbsp;</td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      </tr>
+
+              </tbody></table></div>
+    </div>
+</div>
+    </div>
+    
+
+<!-- JS for Button Pssed -->
+
+
+
+
+{% block custom_js %}
+
+{% endblock custom_js %}
+
 
 
 {% endblock %}

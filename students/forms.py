@@ -30,7 +30,7 @@ class StudentForm(forms.Form):
   email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
   first_name = forms.CharField(label="first_name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
   last_name = forms.CharField(label="last_name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-  middle_initial = forms.CharField(label="middle_initial", max_length=2, widget=forms.TextInput(attrs={"class":"form-control"}))
+  middle_initial = forms.CharField(label="middle_initial", max_length=2,  widget=forms.TextInput(attrs={"class":"form-control"}))
   year_level = forms.ChoiceField(choices=choice, widget=forms.Select(attrs={"class":"form-control"}))
 
 
@@ -128,10 +128,13 @@ class SubForm(forms.ModelForm):
     }
 
 class GradeForm(forms.ModelForm):
+
+  subject_grade = forms.FloatField(min_value=1.0, max_value=5.0)
+ 
   class Meta:
     model = SubjectGrade
     fields = ['subject_id','student_id', 'subject_grade','status']
-    subject_grade = forms.FloatField(min_value=1.0, max_value=5.0)
+
 
     def clean_score(self):
       grade = self.cleaned_data['subject_grade']

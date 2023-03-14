@@ -6,12 +6,11 @@ import json
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, send_mass_mail
 import smtplib
-
-from students.UsernameBackEnd import UsernameBackEnd
 
 from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade
 from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm
@@ -19,44 +18,110 @@ from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentFor
 # Create your views here.
 # Login
 
-def login(request):
+def alogin(request):
   return render(request,'login.html')
 
-def doLogin(request):
-     
-    username = request.GET.get('username')
-    password = request.GET.get('password')
-    # user_type = request.GET.get('user_type')
-    if not (username and password):
-        messages.error(request, "Please provide all the details!!")
-        return render(request, 'login.html')
- 
-    user = CustomUser.objects.filter(username=username, password=password).last()
-    if not user:
-        messages.error(request, 'Invalid Login Credentials!!')
-        return render(request, 'login.html')
- 
-    login(request, user)
- 
-    if user.user_type == CustomUser.Students:
-        return redirect('student_index/')
-    elif user.user_type == CustomUser.PA:
-        return redirect('student/')
-    elif user.user_type == CustomUser.Hod:
-        return redirect('admin/')
- 
-    return render(request, 'login.html')
+def logout_view(request):
+  logout(request)
+  return redirect('alogin')
 
-def logout_user(request):
-    logout(request)
-    return HttpResponseRedirect('/')
+def doLogin(request):
+  if request.method == 'POST':
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+
+    if user is not None:
+      login(request, user)
+      if user.user_type == '1':
+        return redirect('hod_home')
+      elif user.user_type == '2':
+        return redirect('home_pa')
+      elif user.user_type == '3':
+        return redirect('home_student')
+      elif user.user_type == '4':
+        return redirect('home_ojt')
+    else:
+      error_message = 'Invalid login credentials'
+  else:
+    error_message = ''
+
+  return render(request, 'login.html', {'error_message': error_message})
+
+
 # Students
 
+def hod_home(request):
+  if request.user.user_type == '1':
+    context = {
+      'user_name': request.user.get_full_name(),
+      'user_id': request.user.id,
+    }
+    return render(request, 'PA_Views/home_pa.html')
+  else:
+    return render(request, 'login.html')
+
+def home_pa(request):
+  if request.user.user_type == '2':
+    context = {
+      'user_name': request.user.get_full_name(),
+      'user_id': request.user.id,
+    }
+    return render(request, 'PA_Views/home_pa.html')
+  else:
+    return render(request, 'login.html')
+
+@login_required
+def home_student(request):
+  if request.user.user_type == '3':
+    student = Student.objects.get(user_id=request.user.id)
+    return render(request, 'student_view/home_student.html',{
+      'student': student,
+      })
+  else:
+    return render(request, 'login.html')
+#student views
+
+@login_required
+def student_index(request):
+  if request.user.user_type == '3':
+    grades = SubjectGrade.objects.filter(student_id=request.user.id).select_related('subject_id')
+    return render(request,'student_view/index.html',{
+      "students": Student.objects.all(),
+      'subs': Subject.objects.all(),
+      'grades': grades,
+      })
+  else:
+    return render(request, 'login.html')
+
+
+def home_ojt(request):
+  if request.user.user_type == '4':
+    context = {
+      'user_name': request.user.get_full_name(),
+      'user_id': request.user.id,
+    }
+    return render(request, 'ojt_view/home_ojt.html')
+  else:
+    return render(request, 'login.html')
+  
+
 def index(request):
+
+  year_level = request.GET.get('year_level')
+  if year_level:
+    students = Student.objects.filter(year_level=year_level)
+  else:
+    students = Student.objects.all()
   return render(request, 'PA_Views/index.html', {
-    'students': Student.objects.all()
+    'students': students
 
   })
+
+def students_by_year_view(request):
+  return render (request, 'PA_Views/index.hmtl',{
+    'students':Student.objects.filter(year_level=year_level)
+    })
 
 def view_student(request, id):
   student = Student.objects.get(pk=id)
@@ -64,8 +129,18 @@ def view_student(request, id):
 
 def student_grades(request, user_id):
     student = Student.objects.get(user_id=user_id)
-    grades = SubjectGrade.objects.filter(student_id=student)
-    return render(request, 'PA_Views/student_grade.html', {'student': student, 'grades': grades, })
+    #grades = SubjectGrade.objects.filter(student_id=student)
+    grades = SubjectGrade.objects.filter(student_id=student).select_related('subject_id')
+
+    #student = get_object_or_404(Student, pk=student_id)
+    #grades = Student.grade_set.select_related('Subject')
+
+    #student = Student.objects.get(user_id=user_id)
+    #grades = Student.SubjectGrade_set.all()
+    #subject_ids = [grade.CustomUser.id for grade in grades]
+    #subjects = Subject.objects.filter(id__in=subject_ids)
+    return render(request, 'PA_Views/student_grade.html', {'student': student, 'grades': grades,})
+
 
 def save_student(request):
   if request.method == 'POST':
@@ -121,6 +196,8 @@ def edit_student(request, id):
 def delete(request, id):
   if request.method == 'POST':
     student = Student.objects.get(pk=id)
+    student_user = CustomUser.objects.get(pk=id)
+    student_user.delete()
     student.delete()
   return HttpResponseRedirect(reverse('index'))
 
@@ -225,13 +302,13 @@ def add_hod(request):
 
 def delete_hod(request, id):
   if request.method == 'POST':
-    hod = Dept_Head.objects.get(pk=id)
+    hod = CustomUser.objects.get(pk=id)
     hod.delete()
   return HttpResponseRedirect(reverse('hod_list'))
 
 def edit_hod(request, id):
   if request.method == 'POST':
-    hod = Dept_Head.objects.get(pk=id)
+    hod = CustomUser.objects.get(pk=id)
     form = HodForm(request.POST, instance=hod)
     if form.is_valid():
       form.save()
@@ -240,7 +317,7 @@ def edit_hod(request, id):
         'success': True
       })
   else:
-    hod = Dept_Head.objects.get(pk=id)
+    hod = CustomUser.objects.get(pk=id)
     form = HodForm(instance=hod)
   return render(request, 'PA_Views/edit_hod.html', {
     'form': form
@@ -268,9 +345,10 @@ def add_pa(request):
       password = form.cleaned_data['password']
       first_name = form.cleaned_data['first_name']
       last_name = form.cleaned_data['last_name']
+      email =form.cleaned_data['email']
 
 
-      new_PA = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=1)
+      new_PA = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
       new_PA.save()
       return render(request, 'PA_Views/add_pa.html', {
         'form': PaForm(),
@@ -284,13 +362,13 @@ def add_pa(request):
 
 def delete_pa(request, id):
   if request.method == 'POST':
-    pa = ProgramAdvisor.objects.get(pk=id)
+    pa = CustomUser.objects.get(pk=id)
     pa.delete()
   return HttpResponseRedirect(reverse('pa_list'))
 
 def edit_pa(request, id):
   if request.method == 'POST':
-    pa = ProgramAdvisor.objects.get(pk=id)
+    pa = CustomUser.objects.get(pk=id)
     form = PaForm(request.POST, instance=pa)
     if form.is_valid():
       form.save()
@@ -299,7 +377,7 @@ def edit_pa(request, id):
         'success': True
       })
   else:
-    pa = ProgramAdvisor.objects.get(pk=id)
+    pa = CustomUser.objects.get(pk=id)
     form = PaForm(instance=pa)
   return render(request, 'PA_Views/edit_pa.html', {
     'form': form
@@ -436,17 +514,6 @@ def ojt_view_students(request, id):
 
 
 
-#student views
-
-def student_index(request):
-  return render(request,'student_view/index.html',{
-    "students": Student.objects.all(),
-    'subs': Subject.objects.all()
-    })
-
-
-
-
 @csrf_exempt
 def check_email_exist(request):
   email = request.POST.get("email")
@@ -491,6 +558,8 @@ def add_grade(request):
   else:
     form = GradeForm()
   return render(request, 'PA_Views/add_grade.html', {
-    'form': GradeForm()
+    'form': GradeForm(),
+    'students': Student.objects.all(),
+    'subjects': Subject.objects.all()
   })
 

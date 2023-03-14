@@ -39,6 +39,7 @@ class CustomUser(AbstractUser):
   user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
 
 
+
 class Student(models.Model):
   user = models.OneToOneField(CustomUser,on_delete =models.CASCADE, primary_key=True)
   student_number = models.CharField(max_length=50, null=True,blank=True)
@@ -164,9 +165,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
   if instance.user_type == 1:
-    instance.hod.save()
+    instance.Dept_Head.save()
   if instance.user_type == 2:
-    instance.pa.save()
+    instance.programadvisor.save()
   if instance.user_type == 3:
     instance.student.save()
   if instance.user_type == 4:
