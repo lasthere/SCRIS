@@ -23,7 +23,7 @@ def alogin(request):
 
 def logout_view(request):
   logout(request)
-  return redirect('alogin')
+  return redirect('/')
 
 def doLogin(request):
   if request.method == 'POST':
