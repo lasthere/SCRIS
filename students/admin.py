@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Student,ProgramAdvisor,Dept_Head,Ojt_Officer,Subject,SubjectGrade,OjtStatus,Prereq,TotalUnits,CustomUser
+from .models import Student,ProgramAdvisor,Dept_Head,Ojt_Officer,Subject,SubjectGrade,Prereq,CustomUser
 
 # Register your models here.
 class UserModel(UserAdmin):

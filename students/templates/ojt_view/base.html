@@ -22,18 +22,17 @@
   </style>
   <div class="container-fluid">
     <div class="banner" style="background-color:silver ;" >
-      <img src="{% static 'images/logomaster.png' %}" >
+      <img src="{% static 'images/logomaster.png' %}"style=" width:100%;height:20%;" >
     </div>
   </div>
 <div class="container-fluid">
 <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class="border-end "  id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom" style="background-color:#0096FF;" >Student</div>
+                <div class="sidebar-heading border-bottom" style="background-color:#0096FF;" >SIP</div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Events</a>
-                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Profile</a>
-                    <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="#!">Staus</a>
+                  <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="{% url 'home_ojt' %}">Home</a>
+                  <a class="list-group-item list-group-item-action list-group-item-primary p-3" href="{% url 'ojt_index' %}">Student List</a>
                 </div>
             </div>
             <!-- Page content wrapper-->

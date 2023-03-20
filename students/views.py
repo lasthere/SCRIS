@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, send_mass_mail
@@ -85,11 +86,24 @@ def home_student(request):
 @login_required
 def student_index(request):
   if request.user.user_type == '3':
-    grades = SubjectGrade.objects.filter(student_id=request.user.id).select_related('subject_id')
+    student = Student.objects.get(user_id=request.user.id)
+    grades = SubjectGrade.objects.filter(student_id=student).select_related('subject_id')
+
+    passed_subjects = student.subjectgrade_set.filter(status='passed')
+    total_units = sum([subject.subject_id.subj_units_lec for subject in passed_subjects]) + sum([subject.subject_id.subj_units_lab for subject in passed_subjects])
+
+    ojtstatus=""
+    if (total_units == 109.0):
+      ojtstatus="Has Enough Credits"
+    else:
+      ojtstatus="Not Enough Credits"
+
     return render(request,'student_view/index.html',{
       "students": Student.objects.all(),
       'subs': Subject.objects.all(),
       'grades': grades,
+      'ojtstatus':ojtstatus,
+      'total_units':total_units,
       })
   else:
     return render(request, 'login.html')
@@ -131,6 +145,14 @@ def student_grades(request, user_id):
     student = Student.objects.get(user_id=user_id)
     #grades = SubjectGrade.objects.filter(student_id=student)
     grades = SubjectGrade.objects.filter(student_id=student).select_related('subject_id')
+    passed_subjects = student.subjectgrade_set.filter(status='passed')
+    total_units = sum([subject.subject_id.subj_units_lec for subject in passed_subjects]) + sum([subject.subject_id.subj_units_lab for subject in passed_subjects])
+
+    ojtstatus=""
+    if (total_units == 109.0):
+      ojtstatus="Has Enough Credits"
+    else:
+      ojtstatus="Not Enough Credits"
 
     #student = get_object_or_404(Student, pk=student_id)
     #grades = Student.grade_set.select_related('Subject')
@@ -139,7 +161,12 @@ def student_grades(request, user_id):
     #grades = Student.SubjectGrade_set.all()
     #subject_ids = [grade.CustomUser.id for grade in grades]
     #subjects = Subject.objects.filter(id__in=subject_ids)
-    return render(request, 'PA_Views/student_grade.html', {'student': student, 'grades': grades,})
+    return render(request, 'PA_Views/student_grade.html', {
+      'student': student, 
+      'grades': grades,
+      'total_units': total_units,
+      'ojtstatus':ojtstatus,
+      })
 
 
 def save_student(request):
@@ -504,8 +531,47 @@ def contact_form(request):
 #ojt officer views
 
 def ojt_index(request):
-  return render(request,'ojt_view/index.html',{
-    "students": Student.objects.all()
+    passed_grades = SubjectGrade.objects.filter(status='passed')
+
+    student_subject_units = passed_grades.values('student_id', 'subject_id').annotate(
+        total_units=Sum('subject_id__subj_units_lec')+Sum('subject_id__subj_units_lab')
+    )
+
+    student_units = {}
+    for data in student_subject_units:
+        student_id = data['student_id']
+        subject_units = data['total_units']
+        if student_id not in student_units:
+            student_units[student_id] = subject_units
+        else:
+            student_units[student_id] += subject_units
+
+    students = Student.objects.filter(subjectgrade__status='passed').distinct()
+
+    student_data = []
+    for student in students:
+        number = student.user.username
+        name = student.user.get_full_name()
+        middle_initial = student.middle_initial
+        units = student_units.get(student.pk,0)
+        ojtstatus=""
+        if (units == 109.0):
+          ojtstatus="Has Enough Credits"
+        else:
+          ojtstatus="Not Enough Credits"
+        student_data.append({'name': name, 'units': units, 'number':number,'middle_initial':middle_initial,'ojtstatus':ojtstatus,})
+        
+    numstudent = len(student_data)
+
+    count_passed = 0
+    for student in student_data:
+        if student['ojtstatus'] == 'Has Enough Credits':
+            count_passed += 1
+
+    return render(request,'ojt_view/index.html', {
+    "students":student_data,
+    "numstudent":numstudent,
+    "count_passed":count_passed,
     })
 
 def ojt_view_students(request, id):

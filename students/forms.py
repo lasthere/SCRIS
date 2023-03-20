@@ -33,7 +33,15 @@ class StudentForm(forms.Form):
   middle_initial = forms.CharField(label="middle_initial", max_length=2,  widget=forms.TextInput(attrs={"class":"form-control"}))
   year_level = forms.ChoiceField(choices=choice, widget=forms.Select(attrs={"class":"form-control"}))
 
-
+class PaForm(forms.ModelForm):
+  class Meta:
+    model=CustomUser
+    fields = ('username','password','first_name', 'last_name', 'email')
+    username = forms.CharField(label="Username",  widget=forms.TextInput(attrs={"class":"form-control"}))
+    password = forms.CharField(label="Password",  widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={"class":"form-control"}))
+    first_name = forms.CharField(label="first_name", widget=forms.TextInput(attrs={"class":"form-control"}))
+    last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
 
 class EditStudentFormUser(forms.ModelForm):
   class Meta:
@@ -86,15 +94,7 @@ class HodForm(forms.ModelForm):
     last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
 
 
-class PaForm(forms.ModelForm):
-  class Meta:
-    model=CustomUser
-    fields = ('username','password','first_name', 'last_name', 'email')
-    username = forms.CharField(label="Username",  widget=forms.TextInput(attrs={"class":"form-control"}))
-    password = forms.CharField(label="Password",  widget=forms.PasswordInput(attrs={"class":"form-control"}))
-    email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={"class":"form-control"}))
-    first_name = forms.CharField(label="first_name", widget=forms.TextInput(attrs={"class":"form-control"}))
-    last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
+
 
 class SubForm(forms.ModelForm):
   class Meta:

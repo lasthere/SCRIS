@@ -6,8 +6,8 @@
     <link rel="icon" type="image/x-icon" href="{% static 'images/Palompon_Institute_of_Technology.png' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="{% static 'css/ojts.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <style>
       body{
@@ -34,7 +34,7 @@
         display: none;
        }
       .scroll {
-        height: 500px;
+        height: 400px;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
       }
@@ -51,16 +51,17 @@
 
   </head>
 <div class="page-content-wrapper">
-    <div class="banner" style="background-color:rgba(0, 0, 0, 0.09) ;" >
-      <img src="{% static 'images/logomaster.png' %}" >
+    <div class="banner" style="height:!important 50px">
+      <img src="{% static 'images/sample2.jpg' %}"style=" width:100%;height:15%;" >
     </div>
 
 <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class=""  id="sidebar-wrapper">
-                <div class="sidebar-heading" style="background-color: seagreen;" >Student</div>
+                <div class="sidebar-heading" style="background-color: seagreen; color: whitesmoke;" ><strong>Program Adviser</strong></div>
 
                 <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'home_pa' %}">Home</a>
                     <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'index' %}">Student Account List</a>
                     <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'subject_list' %}">Subject List</a>
                     {% url 'contact_form' as contact_form %}
@@ -105,7 +106,9 @@
     <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
 
  
-    <!--<script src="{% static 'js/bootstrap.min.js' %}"></script> -->
+    <script src="{% static 'dist/popper.js' %}"></script>
+    <script src="{% static 'dist/jquery.min.js' %}"></script>
+    <script src="{% static 'dist/bootstrap.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 

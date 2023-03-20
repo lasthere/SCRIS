@@ -14,7 +14,8 @@
 }
 </style>
 
-    <div class="col-12" style="border-radius: 15px;">
+
+    <div class="col-12" style="border-radius: 15px; ">
       <div class="row">
         <div class="card bg-light" >
             <table  class="table">
@@ -40,8 +41,8 @@
 
                  <tr>
                   <td width="1%" height="25">&nbsp;</td>
-                  <td width="49%" valign="middle">  GWA: <strong>2.0</strong></td>
-                  <td width="49%" valign="middle">Total units taken: <strong>132.0</strong></td>
+                  <td width="49%" valign="middle">  Ojt Status <strong>{{ ojtstatus }}</strong></td>
+                  <td width="49%" valign="middle">Total units taken: <strong>{{ total_units }}</strong></td>
                 </tr>
 
 
@@ -142,7 +143,7 @@
 
                       <tr> 
                       <td>&nbsp;</td>
-                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : 21.0</u></strong></div></td>
+                      <td colspan="11"><div align="center"><strong><u>TOTAL REQUIRED UNITS : 21.0</u></strong>     TOTAL UNITS CREDITED : {{ total_units }}</u></strong></div></td>
                       </tr>
 
               </tbody></table></div>

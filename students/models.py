@@ -119,34 +119,6 @@ class SubjectGrade(models.Model):
   def __str__(self):
     return f'Student Suject Grades:{self.student_id}, {self.subject_grade}, {self.status}'
 
-class TotalUnits(models.Model):
-  studentgrade_id =models.ForeignKey(SubjectGrade, on_delete=models.CASCADE, verbose_name="Subject Grades")
-  totalgrades = models.FloatField(max_length=5, default=0)
-  totalunits = models.FloatField(max_length=5, default=0)
-  objects = models.Manager()
-
-  def get_absolute_url(self):
-    return reverse('TotalUnits-details',args[str(self.id)])
-  def __str__(self):
-    return f'Student Total Grades:{self.studentgrade_id}, {self.totalgrades}, {self.totalunits}'
-
-class OjtStatus(models.Model):
-  id = models.AutoField(primary_key=True)
-  class Rem(models.TextChoices):
-    PASSED ='Passed', _('Passed')
-    FAILED = 'Failed', _('Failed')
-    INC = 'Incomplete', _('Incomplete')
-    DROPPED = 'Dropped', _('Dropped')
-    NOATTENDANCE= 'NoAttendance', _('No Attendance')
-  studentgrade_id =models.ForeignKey(SubjectGrade, on_delete=models.CASCADE)
-  totalunits_id =models.ForeignKey(TotalUnits, on_delete=models.CASCADE)
-  ojt_remarks =models.CharField(max_length=20, choices=Rem.choices, default=Rem.FAILED, verbose_name="Remarks")
-  objects = models.Manager()
-  def get_absolute_url(self):
-    return reverse('OjtStatus-details',args[str(self.id)])
-
-  def __str__(self):
-    return f'Student Status: {self.totalunits_id}, {self.ojt_remarks} '
 
 @receiver(post_save, sender=CustomUser)
 # Now Creating a Function which will automatically insert data in HOD, Staff or Student
