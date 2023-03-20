@@ -556,10 +556,10 @@ def ojt_index(request):
         units = student_units.get(student.pk,0)
         year =student.year_level
         ojtstatus=""
-        if (units == 109.0):
-          ojtstatus="Has Enough Credits"
+        if (units >= 109.0):
+          ojtstatus="\u2713"
         else:
-          ojtstatus="Not Enough Credits"
+          ojtstatus="X"
         student_data.append({'name': name, 'units': units, 'number':number,'middle_initial':middle_initial,'ojtstatus':ojtstatus,'year':year})
         
     numstudent = len(student_data)

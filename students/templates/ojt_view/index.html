@@ -7,7 +7,17 @@
   .e:hover{
     opacity: 0.9;
     text-shadow: 1px 1px;
+
 }
+
+   .green{
+      background-color: #3EEB8F; 
+    }
+    .red{
+      background-color: #800000;
+      color: white;
+    }
+
 </style>
 
 
@@ -53,12 +63,12 @@
               </thead>
               <tbody>
                 {% for student in students %}
-                  <tr>
+                  <tr class="{% if student.ojtstatus == '✓' %}green{% elif grade.status == 'X' %}red{% else %}red{% endif %}">
                     <td>{{ student.number }}</td>
                     <td>{{ student.name }} {{ student.middle_initial }}</td>
                     <td>{{ student.year }}</td>
                     <td>{{ student.units }}/109</td>
-                    <td>{{ student.ojtstatus }}</td>
+                    <td>{% if student.ojtstatus == '✓' %}<i class="fa-solid fa-check fa-beat-fade" style="color: white;"></i>{% elif grade.status == 'X' %}<i class="fa-solid fa-xmark fa-beat-fade" style="color: #fff;"></i>{% else %}<i class="fa-solid fa-xmark fa-beat-fade" style="color: white;"></i>{% endif %}</td>
                   </tr>
                 {% endfor %}
               </tbody>
