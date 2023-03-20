@@ -1,7 +1,7 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-  <h3 class="text-center m-4 bg-primary">Add SIP</h3>
+  <h3 class="text-center m-4">Add SIP</h3>
   {% if success %}
     <div class="alert alert-success" role="alert">
       Account successfully added!
@@ -19,7 +19,7 @@
             <form class="form-inline" action="{% url 'add_ojt' %}" method="POST">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" class="btn btn-hal">Add</button>
               <a href="{% url 'ojt_list' %}" class="btn btn-secondary">Cancel</a>
             </form>
           </div>

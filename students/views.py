@@ -499,7 +499,7 @@ def contact_form(request):
  
     message += request.POST['message']
     message += "\n\r\n\r"
-    message += "Click Link: http://127.0.0.1:8000/"
+    message += "http://joseprotacio.pythonanywhere.com/"
 
     recievers = [student.user.email for student in students] 
 

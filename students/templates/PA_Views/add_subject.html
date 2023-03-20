@@ -1,7 +1,7 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3 class="text-center m-4 bg-primary">Add Subject</h3>
+<h3 class="text-center m-4">Add Subject</h3>
   {% if success %}
     <div class="alert alert-success" role="alert">
       The Subject added successfully.
@@ -20,7 +20,7 @@
               {% csrf_token %}
               {{ form.as_p }}
               <div class="col text-center d-grid gap-2">
-                <button type="submit" class="btn btn-outline-primary ">Add</button>
+                <button type="submit" class="btn btn-hal ">Add</button>
                 <a href="{% url 'subject_list' %}" class="btn btn-outline-secondary ">Cancel</a>
               </div>
             </form>

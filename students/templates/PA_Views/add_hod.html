@@ -1,7 +1,7 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-  <h3 class="text-center m-4bg-primary">Add Department Head Account</h3>
+  <h3 class="text-center m-4y">Add Department Head Account</h3>
   {% if success %}
     <div class="alert alert-success" role="alert">
       New account successfully added.
@@ -18,7 +18,7 @@
             <form class="form-inline" action="{% url 'add_hod' %}" method="POST">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" class="btn btn-hal">Add</button>
               <a href="{% url 'hod_list' %}" class="btn btn-secondary">Cancel</a>
             </form>
           </div>

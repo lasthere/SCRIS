@@ -3,28 +3,41 @@
 {% block custom_js %}
 
 {% endblock custom_js%}
-<script >
-</script>
+ <style media="screen">
+      *,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #080710;
+}
+.as{
+  background-color: background-color: rgba(20,0,0,0.7);;
+}
 
-<form class="box" action="{% url 'doLogin' %}" method="post">
-{% csrf_token %}
+    </style>
+</head>
+<body>
+    <form class="box" action="{% url 'doLogin' %}" method="post">
+      {% csrf_token %}
+        <h3 class="text-light">Login</h3>
+         {% if error_message %}
+          <div class="as alert text-danger alert-dismissible fade show" role="alert">
+          <strong>{{ error_message }}!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="password" name="password" id="password" placeholder="Password">
 
-  <h1>Login</h1>
-  {% if error_message %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong>{{ error_message }}!</strong>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-{% endif %}
-  <input type="text" name="username" id="username" placeholder="Username">
-  <input type="password" name="password" id="password" placeholder="Password">
+        <input type="submit">Log In</button>
 
-  <input type="submit">
+    </form>
 
-</form>
-
-</body>
 
 {% endblock %}

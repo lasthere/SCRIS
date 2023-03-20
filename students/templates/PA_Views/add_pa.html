@@ -18,7 +18,7 @@
             <form class="form-inline" action="{% url 'add_pa' %}" method="POST">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" class="btn btn-hal">Add</button>
               <a href="{% url 'pa_list' %}" class="btn btn-secondary">Cancel</a>
             </form>
           </div>
