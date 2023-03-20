@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Student Curriculum Residency Informations System</title>
     <link rel="icon" type="image/x-icon" href="{% static 'images/Palompon_Institute_of_Technology.png' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link href="{% static 'css/ojts.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/ojts.css' %}" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
     <style>
       body{
-        background-image: url('{% static '' %}');
+        background-image: url("{% static 'images/art.jpg' %}");
         background-repeat: no-repeat, repeat;
         background-size: 100% 100%;
       }
@@ -34,7 +34,7 @@
         display: none;
        }
       .scroll {
-        height: 400px;
+        height: 500px;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
       }
@@ -77,33 +77,25 @@
                     <div class="container-fluid">
                         <button class="btn btn-success" id="Toggle"><i class="fa fa-bars"></i></button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                        <div class="row">
                         {% if user.is_authenticated %}
-                          <form action="{% url 'logout' %}" method="post">
-                          {% csrf_token %}
-                          <button class="btn btn-danger" type="submit">Logout</button>
-                        </form>
+                          <a class="btn btn-danger" href="{% url 'logout' %}" role="button">Logout</a>
                         {% endif %}
-                        </div>
 
                 </nav>
                 <!-- Page content-->
                   <div class="scroll container-fluid ">
                     {% block body %}
-                    
+                   
                     {% endblock %}
-                    <div class="footer">
-                      <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
-                    </div>
-                    
+                     <footer class="page-footer font-small blue">
+                      <div class="footer-copyright text-center py-3">Copyright &copy; <script>document.write(new Date().getFullYear())</script>
+                        <span> Delta 5 Project</span>
+                      </div>
+                    </footer> 
+                  </div>   
+
             </div>
-        </div>
-      
-
-    </div>
 </div>
-
-    <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
 
  
     <script src="{% static 'dist/popper.js' %}"></script>

@@ -2,26 +2,31 @@
 
 
 {% block body %}
-
-
+{% load static %}
+<style>
+  .e:hover{
+    opacity: 0.9;
+    text-shadow: 1px 1px;
+}
+</style>
 
 
   <div class="col-12 mt-4">
     <div class="row ms-4 me-4 mb-4">
 
-      <div class="card me-4" style="width: 18rem;">
+      <div class="e card bg-dark text-light me-4" style="width: 18rem;">
       <div class="card-body">
         <h4 class="card-title">Total Students</h4>
-        <h3 class="card-subtitle mb-2 text-muted">{{ numstudent }}</h3>
-        <a href="{% url 'ojt_index' %}" class="card-link">More info</a>
+        <h3 class="card-subtitle mb-2">{{ numstudent }}</h3>
+        <a href="{% url 'ojt_index' %}" class="stretched-link"></a>
       </div>
     </div>
 
-    <div class="card me-4" style="width: 18rem;">
+    <div class="e card bg-dark text-light me-4" style="width: 18rem;">
       <div class="card-body">
         <h4 class="card-title">Ready For OJT</h4>
         <h3 class="card-subtitle mb-2 text-muted">{{ count_passed }}</h3>
-        <a href="{% url 'ojt_index' %}" class="card-link">More info</a>
+        <a href="{% url 'ojt_index' %}" class="stretched-link"></a>
       </div>
     </div>
     </div>
@@ -29,8 +34,8 @@
 
     {% if students %}
     <div class="card bg-light ms-4 me-4 mb-4">
-      <div class="card-header text-light " style="background-color:pink;">
-        <i class="fa-solid fa-list fa-lg"></i> Student Records For OJT
+      <div class="card-header text-dark " style="background-color:rgba(249, 191, 59, 1.0);">
+        <i class="fa-solid fa-list fa-lg"></i><strong><em> Student Records For OJT</em></strong>
       </div>
       <div class="card-body">
         <p class="card-text">
@@ -41,6 +46,7 @@
 
                   <th scope="col">Student Number</th>
                   <th scope="col">Student Name</th>
+                  <th scope="col">Student Year</th>
                   <th scope="col">Units Taken</th>
                   <th scope="col">Remarks</th>
                 </tr>
@@ -50,7 +56,8 @@
                   <tr>
                     <td>{{ student.number }}</td>
                     <td>{{ student.name }} {{ student.middle_initial }}</td>
-                    <td>{{ student.units }}-156</td>
+                    <td>{{ student.year }}</td>
+                    <td>{{ student.units }}/109</td>
                     <td>{{ student.ojtstatus }}</td>
                   </tr>
                 {% endfor %}
@@ -60,6 +67,12 @@
         </p>
       </div>
     </div>
+      <div class="card bg-light ms-4 me-4 mb-4">
+        <div class="card-body">
+          This is some text within a card body.
+        </div>
+      </div>
+
     {% else %}
     <div class="card bg-light ms-4 me-4 mb-4">
      <div class="card-header">

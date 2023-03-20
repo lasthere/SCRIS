@@ -554,12 +554,13 @@ def ojt_index(request):
         name = student.user.get_full_name()
         middle_initial = student.middle_initial
         units = student_units.get(student.pk,0)
+        year =student.year_level
         ojtstatus=""
         if (units == 109.0):
           ojtstatus="Has Enough Credits"
         else:
           ojtstatus="Not Enough Credits"
-        student_data.append({'name': name, 'units': units, 'number':number,'middle_initial':middle_initial,'ojtstatus':ojtstatus,})
+        student_data.append({'name': name, 'units': units, 'number':number,'middle_initial':middle_initial,'ojtstatus':ojtstatus,'year':year})
         
     numstudent = len(student_data)
 
