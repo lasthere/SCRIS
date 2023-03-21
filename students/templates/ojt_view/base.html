@@ -11,7 +11,8 @@
   </head>
   <style>
      body{
-        background-image: url("{% static 'images/wor.jpg' %}");
+        background-image: url("{% static '' %}");
+        background-color: #F2EDD7FF;
         background-repeat: no-repeat, repeat;
         background-size: 100% 100%;
       }
@@ -23,17 +24,17 @@
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
     }
+    .aw{
+      background-color: #755139FF;
+    }
     .as{
-      background: #F2EDD7FF;
+      background: #D4B996FF;
     }
     .ab{
       background: #343148FF;
     }
     .green{
       background-color:#3EEB8F ; 
-    }
-    .red{
-      background-color: #800000.;
     }
     .list-group-item-action.active.p-3 {
       background-color: #D7C49EFF;
@@ -55,7 +56,7 @@
 <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div  id="sidebar-wrapper">
-                <div class="sidebar-heading text-light bg-dark " ><strong>SIP</strong></div>
+                <div class="aw sidebar-heading text-light" ><strong>SIP</strong></div>
 
                 <div class="list-group list-group-flush">
                   {% url 'home_ojt' as home_ojt %}
@@ -67,7 +68,7 @@
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->
-                <nav class="navbar navbar-expand navbar-dark bg-dark">
+                <nav class="aw navbar navbar-expand navbar-dark ">
                     <div class="container-fluid">
                         <button class="as btn "  id="sidebarToggle"><i class="fa fa-bars"></i></button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
