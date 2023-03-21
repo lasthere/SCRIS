@@ -1,13 +1,42 @@
 {% extends "student_view/base.html" %}
 
 {% block body %}
-<div class="container-fluid">
-	<h3>Welcome {{ user.first_name }} {{ user.last_name }} {{ user.student.middle_initial }}</h3>
-</div>
+
+
+<div class="card bg-light ms-4 me-4 mb-4">
+	<div class="card-header text-light ba">
+		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
+	</div>
+    <div class="card-body">
+     Make sure your email is the one your currently using!
+     </div>
+ </div>
+{% if subject_count != 0 %}
+	<div class="card bg-light ms-4 me-4 mb-4">
+		<div class="card-header text-light {% if failed_count > 0 %}red{% else %}ba{% endif %}">
+			<button type="button" class="btn-close float-right" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-x"></i></button>
+				<h3><i class="fa-solid {% if failed_count > 0 %} fa-user-xmark {% else %} fa-user-check {% endif %}"></i> Notice</h3>
+				
+		</div>
+		<div class="card-body">
+		    {{ message }}
+		 </div>
+	 </div>
+{% endif %}
 
 <footer class="page-footer font-small mb-2">
 	<div class="footer-copyright text-center py-3">Copyright &copy; <script>document.write(new Date().getFullYear())</script>
         <span> Delta 5 Project</span>
     </div>
 </footer> 
+
+<script>
+
+ 	var closeButton = document.querySelector('.card-header .btn-close');
+ 	closeButton.addEventListener('click', function() {
+ 		var cardHeader = this.parentNode;
+ 		var card = cardHeader.parentNode;
+ 		card.parentNode.removeChild(card);
+ 	});
+ </script>
 {% endblock %}

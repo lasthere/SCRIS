@@ -30,8 +30,17 @@
       background-color: #0d98ba;
       color: #fff;
     }
+    .list-group-item-action.active.p-3 {
+      background-color: #0d98ba;
+      border-radius: #0d98ba;
+      color: #fff;
+    }
+
     .ba{
      background-color: #1c4a59;
+    }
+    .red{
+      background-color: #880808;
     }
   </style>
 <body>
@@ -46,9 +55,11 @@
             <div class=""  id="sidebar-wrapper">
                 <div class="ba sidebar-heading text-light" ><strong>Student</strong></div>
                 <div class="list-group list-group-flush">
-                    <a class="as list-group-item list-group-item-action list-group-itemp-3" href="{% url 'home_student' %}">Home</a>
-                    <a class="as list-group-item list-group-item-action list-group-item p-3" href="{% url 'student_index' %}">Curriculum Residency</a>
-                    <a class="as list-group-item list-group-item-action list-group-item p-3" href="#!">Profile</a>
+                    {% url 'home_student' as home_student %}
+                    <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == home_student %} active {% endif %}" href="{{ home_student }}"><i class="fa-solid fa-house"></i>  Home</a>
+                    {% url 'student_index' as student_index %}
+                     <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == student_index %} active {% endif %}" href="{% url 'student_index' %}"><i class="fa-solid fa-school"></i>  Curriculum Residency</a>
+
                 </div>
             </div>
             <!-- Page content wrapper-->

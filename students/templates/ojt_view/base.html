@@ -18,7 +18,7 @@
     .scroll::-webkit-scrollbar {
           display: none;
     }
-        .scroll {
+    .scroll {
           height: 70%;
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
@@ -34,6 +34,13 @@
     }
     .red{
       background-color: #800000.;
+    }
+    .list-group-item-action.active.p-3 {
+      background-color: #D7C49EFF;
+      border-radius: #D7C49EFF;
+      color: black;
+      opacity: 0.9;
+
     }
   </style>
   <body>
@@ -51,8 +58,10 @@
                 <div class="sidebar-heading text-light bg-dark " ><strong>SIP</strong></div>
 
                 <div class="list-group list-group-flush">
-                  <a class="list-group-item list-group-item-action list-group-item-warning p-3" href="{% url 'home_ojt' %}">Home</a>
-                  <a class="list-group-item list-group-item-action list-group-item-warning p-3" href="{% url 'ojt_index' %}">Student List</a>
+                  {% url 'home_ojt' as home_ojt %}
+                  <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == home_ojt %} active {% endif %}" href="{{ home_ojt }}">Home</a>
+                  {% url 'ojt_index' as ojt_index %}
+                  <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == ojt_index %} active {% endif %}" href="{{ ojt_index }}">Student List</a>
                 </div>
             </div>
             <!-- Page content wrapper-->

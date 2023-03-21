@@ -1,6 +1,31 @@
 {% extends "ojt_view/base.html" %}
 
 {% block body %}
-<h3>Welcome</h3>
+<div class="card bg-light ms-4 me-4 mb-4 mt-2">
+	<div class="card-header text-dark as">
+		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.username }}!</h3>
+	</div>
+    <div class="card-body">
+     Working On it!
+     </div>
+ </div>
+  <div class="row ms-4 me-4 mb-4">
+ 	<div class="card bg-light me-4 mb-4" style=" width: 16rem; opacity: 0.9;">
+		<div class="card-header text-dark as">
+			 <h3><i class="fa-solid fa-user-xmark"></i> To Do List!</h3>
+		</div>
+	    <div class="card-body" >
+	    	<p class="card-text ">
+			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Not All Links are Functional..</span></strong>
+			    <br>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Filters for Easy Access..</span></strong>
+			    <br>-including search bars and shit.
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> More Icons..</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Remove Accessibility without login..</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Click student list leads to curriculum residency</span></strong>
+	    	</p>  
+	     </div>
+	 </div>
+ </div>
 
 {% endblock %}

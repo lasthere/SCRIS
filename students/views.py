@@ -76,8 +76,22 @@ def home_pa(request):
 def home_student(request):
   if request.user.user_type == '3':
     student = Student.objects.get(user_id=request.user.id)
+    grades = SubjectGrade.objects.filter(student_id=student).select_related('subject_id')
+
+    subject_count = grades.count()
+
+    failed_count = student.subjectgrade_set.filter(status='failed').count()
+
+    if failed_count > 0:
+      message =f"You have { failed_count } failed subjects!"
+    else:
+      message=f"Your doing great { student.user.first_name }, keep it up!"
+
     return render(request, 'student_view/home_student.html',{
       'student': student,
+      'failed_count':failed_count,
+      'message':message,
+      'subject_count':subject_count,
       })
   else:
     return render(request, 'login.html')
@@ -89,14 +103,19 @@ def student_index(request):
     student = Student.objects.get(user_id=request.user.id)
     grades = SubjectGrade.objects.filter(student_id=student).select_related('subject_id')
 
+
     passed_subjects = student.subjectgrade_set.filter(status='passed')
     total_units = sum([subject.subject_id.subj_units_lec for subject in passed_subjects]) + sum([subject.subject_id.subj_units_lab for subject in passed_subjects])
 
     ojtstatus=""
-    if (total_units == 109.0):
+    if (total_units >= 109.0):
       ojtstatus="Has Enough Credits"
-    else:
+    elif (total_units < 109.0):
       ojtstatus="Not Enough Credits"
+    elif (total_units == 0):
+      ojtstatus="No Records"
+    else:
+      ojtstatus=""
 
     return render(request,'student_view/index.html',{
       "students": Student.objects.all(),

@@ -53,6 +53,13 @@
         background-color: #0d98ba;
         border-color: #0d98ba;
       }
+      .list-group-item-action.active.p-3 {
+      background-color: #D4F1F4;
+      border-radius: #D4F1F4;
+      color: black;
+      opacity: 0.9;
+
+    }
 
     </style>
 
@@ -68,12 +75,21 @@
                 <div class="hal sidebar-heading" style="color: whitesmoke;" ><strong>Program Adviser</strong></div>
 
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'home_pa' %}">Home</a>
-                    <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'index' %}">Student Account List</a>
-                    <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'subject_list' %}">Subject List</a>
+                   {% url 'home_pa' as home_pa %}
+                    <a href="{{  home_pa }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == home_pa %} active {% endif %}">Home</a>
+
+                    {% url 'index' as index %}
+                    <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}">Student List</a>
+
+                    {% url 'subject_list' as subject_list %}
+                    <a href="{{  subject_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == subject_list %} active {% endif %}">Subject List</a>
+
                     {% url 'contact_form' as contact_form %}
-                    <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == admin_home %} active {% endif %}">Send Mail</a>
-                    <a class="list-group-item list-group-item-action list-group-item-success p-3" href="{% url 'add_grade' %}">Add Grades</a>
+                    <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}">Send Mail</a>
+
+                    {% url 'add_grade' as add_grade %}
+                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}">Add Grades</a>
+
                     <a class="list-group-item list-group-item-action list-group-item-success p-3" href=#>Profile</a>
                 </div>
             </div>

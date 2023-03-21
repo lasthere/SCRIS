@@ -1,6 +1,62 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3>Welcome {{ user.username }}! </h3>
+<div class="card bg-light ms-4 me-4 mb-4">
+	<div class="card-header text-light hal">
+		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.username }}!</h3>
+	</div>
+    <div class="card-body">
+     Working on Process!
+     </div>
+ </div>
+ <div class="row ms-4 me-4 mb-4">
+ 	<div class="card bg-light me-4 mb-4" style="width: 18rem; opacity: 0.9;">
+		<div class="card-header text-light hal">
+			 <h3><i class="fa-solid fa-user-xmark"></i> To Do List!</h3>
+		</div>
+	    <div class="card-body" >
+	    	<p class="card-text ">
+			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Csv File Upload..</span></strong>
+			    <br>-Student &nbsp; &nbsp; &nbsp; &nbsp;  -Subject
+			    <br>-Grades
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Profile </span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Filters for Easy Access..</span></strong>
+			    <br>-including search bars and shit.
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> More Icons..</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Remove Accessibility without login..</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Ngutana ni sir unsay maayo..</span></strong>
+	    	</p>  
+	     </div>
+	 </div>
+	 <div class="card bg-light me-4 mb-4" style="width: 18rem; opacity: 0.9;">
+		<div class="card-header text-light hal">
+			 <h3><i class="fa-solid fa-user-check"></i> Done?</h3>
+		</div>
+	    <div class="card-body" >
+	    	<p class="card-text ">
+			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Login</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i>Nav Bar</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Email Message</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Notify Students</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Prerequisite..? pa check ta ani</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Check Student Legible for OJT</span></strong>
+			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Add Grade? Di sure basin di ni mao</span></strong>
+	    	</p>  
+	     </div>
+	 </div>
+	 <div class="card bg-light me-4 mb-4" style="width: 18rem; opacity: 0.9;">
+		<div class="card-header text-light hal">
+			 <h3><i class="fa-solid fa-triangle-exclamation"></i> Notice!</h3>
+		</div>
+	    <div class="card-body" >
+	    	<p class="card-text ">
+			   	<strong><span><i class="fa-solid fa-circle-dot"></i> click student list .. then click sa name makita ang scri</span></strong>
+			   	<br><strong><span><i class="fa-solid fa-circle-dot"></i> an sa subject kay edit</span></strong>
+	    	</p>  
+	     </div>
+	 </div>
+ </div>
+
+
 
 {% endblock %}
