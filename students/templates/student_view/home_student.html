@@ -1,7 +1,7 @@
 {% extends "student_view/base.html" %}
 
 {% block body %}
-<div class="card bg-light m-1">
+<div class="card bg-light">
 	<div class="card-header text-light ba">
 		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
 	</div>
@@ -10,7 +10,7 @@
      </div>
  </div>
 {% if subject_count != 0 %}
-	<div class="card bg-light m-1">
+	<div class="card bg-light mt-1">
 		<div class="card-header text-light {% if failed_count > 0 %}red{% else %}ba{% endif %}">
 			<button type="button" class="btn-close float-right" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-x"></i></button>
 				<h3><i class="fa-solid {% if failed_count > 0 %} fa-user-xmark {% else %} fa-user-check {% endif %}"></i> Notice</h3>
