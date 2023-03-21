@@ -11,7 +11,7 @@
 
     <style>
       body{
-        background-image: url("{% static 'images/art.jpg' %}");
+        background-image: url("{% static 'images/Background Design1.jpg' %}");
         background-repeat: no-repeat, repeat;
         background-size: 100% 100%;
       }
@@ -23,7 +23,7 @@
       h3{
         background-color: #0d98ba;
         color: black;
-        border-radius: 15%;
+
       }
 
       .card{
@@ -37,6 +37,9 @@
         height: 500px;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
+      }
+      .al{
+        color: #0d98ba;
       }
       .hal{
         background-color: #0d98ba;
@@ -112,7 +115,7 @@
 
                 </nav>
                 <!-- Page content-->
-                  <div class="scroll container-fluid mt-2">
+                  <div class="scroll mt-1">
                     {% block body %}
                    
                     {% endblock %}

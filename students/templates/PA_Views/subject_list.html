@@ -1,19 +1,15 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3 class="m-3 text-center text-light">Subjects</h3>
-<div class="row">
-  <div class="col-12">
+<h3 class="m-1 text-center text-dark">Subjects</h3>
+<div class="row m-1">
     {% if subs %}
-    <div class="card bg-light ms-4 me-4 mb-4">
-      <div class="card-header">
-        <i class="fa-solid fa-list fa-lg"></i> Subjects
-        <a style="float: right;"href="{% url 'add_subject' %}">
-            <i class="fa-solid fa-plus fa-lg "></i> Add Subjects
-          </a>
+    <div class="card bg-light">
+      <div class="card-header text-dark">
+        <i class="fa-solid fa-list fa-lg"></i> Subjects List
+        <a class="text-center text-dark" style="float: right; text-decoration: none;"href="{% url 'add_subject' %}"><i class="fa-solid fa-book"></i>+Subject</a>
       </div>
       <div class="card-body">
-        <p class="card-text">
           <div class="table-responsive">
             <table class="table table-hover">
               <thead>
@@ -118,11 +114,10 @@
               </tbody>
             </table>
           </div>
-        </p>
       </div>
     </div>
     {% else %}
-    <div class="card bg-light ms-4 me-4 mb-4">
+    <div class="card bg-light m-1">
       <div class="card-header">
         <i class="fa-solid fa-list fa-lg"></i> Subjects
           <a style="float: right;"href="{% url 'add_subject' %}">
@@ -130,7 +125,7 @@
           </a>
 
       </div>  
-      <h5 class="alert alert-primary ms-4 me-4">No Subject Found</h5>
+      <h5 class="alert alert-primary m-1">No Subject Found</h5>
         <footer>
           <div class="text-center">
             <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
@@ -139,7 +134,7 @@
     </div>
 
     {% endif %}
-  </div>
+
 </div>
 
 <script>

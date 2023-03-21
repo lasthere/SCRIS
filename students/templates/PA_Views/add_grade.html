@@ -5,15 +5,14 @@
  <script>
     $('.alert').alert()
 </script>
-<h3 class="text-center m-4"> Add Student Grade</h3>
+<h3 class="text-center m-1"> Add Student Grade</h3>
   {% if success %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       The <strong>Grade</strong>  added successfully.
       <a href="{% url 'add_grade' %}" class="alert-link">Grade More.</a>
     </div>
   {% else %}
-    <div class="row justify-content-center">
-      <div class="col-10">
+    <div class="row justify-content-center m-1">
         <div class="card">
           <div class="card-header">
             <i class="fa-solid fa-address-card fa-lg"></i> Add Student Grade

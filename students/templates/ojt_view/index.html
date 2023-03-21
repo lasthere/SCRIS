@@ -27,21 +27,21 @@
 </style>
 
 
-  <div class="mt-2">
-    <div class="row ms-2 me-2 mb-2">
+  <div class="mt-1">
+    <div class="row ms-1 me-1 mb-1">
 
-      <div class="e as card text-dark me-2" style="width: 16rem;">
+      <div class="e as card text-dark me-1" style="width: 16rem;">
       <div class="card-body">
         <h4 class="card-title">Total Students</h4>
-        <h3 class="card-subtitle mb-2">{{ numstudent }}</h3>
+        <h3 class="card-subtitle mb-1">{{ numstudent }}</h3>
         <a href="{% url 'ojt_index' %}" class="stretched-link"></a>
       </div>
     </div>
 
-    <div class="e as card text-dark me-2" style="width: 16rem;">
+    <div class="e as card text-dark me-1" style="width: 16rem;">
       <div class="card-body">
         <h4 class="card-title">Ready For OJT</h4>
-        <h3 class="card-subtitle mb-2 text-muted">{{ count_passed }}</h3>
+        <h3 class="card-subtitle mb-1 text-dark">{{ count_passed }}</h3>
         <a href="{% url 'ojt_index' %}" class="stretched-link"></a>
       </div>
     </div>
@@ -49,12 +49,10 @@
 
 
     {% if students %}
-    <div class="card bg-light ms-2 me-2 mb-2">
+    <div class="card bg-light ms-1 me-1 mb-1">
       <div class="aw card-header text-light  ">
         <i class="fa-solid fa-list fa-lg"></i><strong><em> Student Records For OJT</em></strong>
       </div>
-      <div class="card-body">
-        <p class="card-text">
           <div class="table-responsive">
             <table class="table table-hover">
               <thead>
@@ -80,13 +78,11 @@
               </tbody>
             </table>
           </div>
-        </p>
-      </div>
     </div>
 
 
     {% else %}
-    <div class="card bg-light ms-4 me-4 mb-4">
+    <div class="card bg-light ms-1 me-1 mb-1">
      <div class="card-header">
         <i class="fa-solid fa-list fa-lg"></i> Student Records
           <a style="float: right;"href="{% url 'add' %}">
@@ -94,7 +90,7 @@
           </a>
 
       </div>  
-      <h5 class="alert alert-primary ms-4 me-4">No Student Found</h5>
+      <h5 class="alert alert-primary ms-1 me-1">No Student Found</h5>
     </div>
     {% endif %}
   </div>

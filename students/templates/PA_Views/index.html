@@ -1,16 +1,14 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3 class="m-4" style="position:relative;">All Students</h3>
+<h3 class="m-1 text-center" style="position:relative;">All Students</h3>
 
-  <div class="col-12">
     {% if students %}
-    <div class="card bg-light ms-4 me-4 mb-4">
+    <div class="card bg-light m-1">
       <div class="card-header">
         <i class="fa-solid fa-list fa-lg"></i> Student Records
-        <a style="float: right;"href="{% url 'add' %}">
-            <i class="fa-solid fa-plus fa-lg "></i> Add Student
-        </a>
+        <a class="text-center text-dark"style="float: right;"href="{% url 'add' %}">
+            <i class="text-center fa-solid fa-user-plus"></i>Student</a>
         <div class="btn-group" style="float: right; margin-right:2%;">
           <form action="{% url 'index' %}" method="GET">
           <select name="year_level" id="year_level">
@@ -26,7 +24,6 @@
         
       </div>
       <div class="card-body">
-        <p class="card-text">
           <div class="table-responsive">
             <table class="table table-hover">
               <thead>
@@ -124,17 +121,16 @@
               </tbody>
             </table>
           </div>
-        </p>
       </div>
     </div>
     {% else %}
-    <div class="card bg-light ms-4 me-4 mb-4">
+    <div class="card bg-light m-1">
      <div class="card-header">
         <i class="fa-solid fa-list fa-lg"></i> Student Records
           <a style="float: right;"href="{% url 'add' %}">
-            <i class="fa-solid fa-plus fa-lg "></i> Add Student
+            <i class="text-center fa-solid fa-user-plus"></i>Student</a>
           </a>
-        <div class="btn-group" style="float: right; margin-right:2%;">
+        <div class="btn-group me-1" style="float: right;">
           <form action="{% url 'index' %}" method="GET">
           <select name="year_level" id="year_level">
             <option value="">------</option>
@@ -149,11 +145,10 @@
         </div>
 
       </div>  
-      <div ">
-        <h5 class="alert alert-primary ms-4 me-4">No Student Found</h5>
+      <div >
+        <h5 class="alert alert-primary m-1">No Student Found</h5>
       </div>
        
-    </div>
     {% endif %}
   </div>
 </div>
