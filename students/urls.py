@@ -58,6 +58,7 @@ urlpatterns = [
   path('home_student/', views.home_student, name='home_student'),
   path('student_index/', views.student_index, name='student_index'),
   path('students/year/<str:year_level>/', views.students_by_year_view, name='students_by_year'),
+  path('student_profile/',views.student_profile, name='student_profile'),
 
   #sending mail
   path('contact_form/',views.contact_form, name="contact_form"),

@@ -60,6 +60,9 @@
                     {% url 'student_index' as student_index %}
                      <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == student_index %} active {% endif %}" href="{% url 'student_index' %}"><i class="fa-solid fa-school"></i>  Curriculum Residency</a>
 
+                     {% url 'student_profile' as student_profile %}
+                     <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == student_profile %} active {% endif %}" href="{% url 'student_profile'  %}"><i class="fa-solid fa-school"></i> Profile</a>
+
                 </div>
             </div>
             <!-- Page content wrapper-->

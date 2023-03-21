@@ -9,12 +9,13 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, send_mass_mail
 import smtplib
 
 from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade
-from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm
+from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile
 
 # Create your views here.
 # Login
@@ -95,6 +96,26 @@ def home_student(request):
       })
   else:
     return render(request, 'login.html')
+
+@login_required
+def student_profile(request):
+  if request.user.user_type == '3':
+    if request.method == 'POST':
+      student_user = CustomUser.objects.get(id=request.user.id)
+      student = Student.objects.get(user_id=request.user.id)
+      form1 =EditProfile(request.POST, instance=student_user)
+      if form1.is_valid():
+        form1.save()
+        return render(request, 'student_view/profile.html', {
+          'form1': form1,
+          'success': True
+        })
+    else:
+      student_user = CustomUser.objects.get(pk=request.user.id)
+      form1 =EditProfile(instance=student_user)
+  return render(request, 'student_view/profile.html', {
+    'form1': form1
+  })
 #student views
 
 @login_required
@@ -107,9 +128,11 @@ def student_index(request):
     passed_subjects = student.subjectgrade_set.filter(status='passed')
     total_units = sum([subject.subject_id.subj_units_lec for subject in passed_subjects]) + sum([subject.subject_id.subj_units_lab for subject in passed_subjects])
 
+    
     ojtstatus=""
     if (total_units >= 109.0):
       ojtstatus="Has Enough Credits"
+      
     elif (total_units < 109.0):
       ojtstatus="Not Enough Credits"
     elif (total_units == 0):
@@ -585,7 +608,7 @@ def ojt_index(request):
 
     count_passed = 0
     for student in student_data:
-        if student['ojtstatus'] == 'Has Enough Credits':
+        if student['ojtstatus'] == "\u2713":
             count_passed += 1
 
     return render(request,'ojt_view/index.html', {

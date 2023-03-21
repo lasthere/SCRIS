@@ -1,5 +1,6 @@
 from django import forms 
 from django.forms import Form
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
 from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade
 
@@ -52,6 +53,27 @@ class EditStudentFormUser(forms.ModelForm):
     email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
     first_name = forms.CharField(label="first_name",max_length=50,  widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name = forms.CharField(label="last_name",max_length=50,  widget=forms.TextInput(attrs={"class":"form-control"}))
+
+    def save(self, commit=True):
+        user = super(UserForm, self).save(commit=False)
+        user.password = make_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+class EditProfile(forms.ModelForm):
+  class Meta:
+    model=CustomUser
+    fields = ('password','email')
+    password = forms.CharField(label="Password", max_length=50,  widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
+    
+    def save(self, commit=True):
+        user = super(UserForm, self).save(commit=False)
+        user.password = make_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return use
 
 
 class EditStudentForm(forms.ModelForm):
