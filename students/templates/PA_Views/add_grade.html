@@ -5,18 +5,23 @@
  <script>
     $('.alert').alert()
 </script>
-<h3 class="text-center m-1"> Add Student Grade</h3>
   {% if success %}
+  <h3 class="text-center m-1"> Add Student Grade</h3>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       The <strong>Grade</strong>  added successfully.
       <a href="{% url 'add_grade' %}" class="alert-link">Grade More.</a>
     </div>
   {% else %}
-    <div class="row justify-content-center m-1">
-        <div class="card">
-          <div class="card-header">
-            <i class="fa-solid fa-address-card fa-lg"></i> Add Student Grade
-          </div>
+    <div class="card bg-light m-1">
+      <h3 class="text-center text-dark">Subjects</h3>
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item me-auto">
+               <i class="fa-solid fa-address-card fa-lg"></i> Add Student Grade
+            </li>
+          </ul>
+        </div>
+          
           <div class="card-body">
             <form class="form-block" action="{% url 'add_grade' %}" method="POST">
               {% csrf_token %}
@@ -36,6 +41,7 @@
             
           </div>
         </div>
+      </div>
       </div>
        <footer class="page-footer font-small blue">
                       <div class="footer-copyright text-center py-3">Copyright &copy; <script>document.write(new Date().getFullYear())</script>

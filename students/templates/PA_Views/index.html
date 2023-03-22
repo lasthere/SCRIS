@@ -7,10 +7,10 @@
     <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button type="submit" name="submit" value="1">Search</button>
+              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button class="btn-outline-secondary" type="submit" name="submit" value="1"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
               </form>
             </li>
-            <li class="nav nav-item ml-auto mr-1">
+            <li class="nav-item ml-2">
               <form action="{% url 'index' %}" method="GET">
                 <select name="year_level" id="year_level">
                   <option value="">--Year Level--</option>
@@ -19,12 +19,12 @@
                   <option value="JUNIOR">JUNIOR</option>
                   <option value="SENIOR">SENIOR</option>
                 </select>
-                <button type="submit">Filter</button>
+                <button class="btn-outline-secondary" type="submit"><i class="fa-solid fa-list"></i> Filter</button>
               </form>
             </li>
-            <div class="mr-1">
-              <li class="nav nav-item ml-auto">
-                <a class="text-dark" href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
+            <div class="ml-auto">
+              <li class="nav nav-item ">
+                <a class="btn btn-outline-dark " href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
               </li>
             </div>
           </ul>
@@ -135,10 +135,10 @@
      <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button type="submit" name="submit" value="1">Search</button>
+              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button class="btn-outline-secondary" type="submit" name="submit" value="1"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
               </form>
             </li>
-            <li class="nav nav-item ml-auto mr-1">
+            <li class="nav-item ml-2">
               <form action="{% url 'index' %}" method="GET">
                 <select name="year_level" id="year_level">
                   <option value="">--Year Level--</option>
@@ -147,12 +147,12 @@
                   <option value="JUNIOR">JUNIOR</option>
                   <option value="SENIOR">SENIOR</option>
                 </select>
-                <button type="submit">Filter</button>
+                <button class="btn-outline-secondary" type="submit"><i class="fa-solid fa-list"></i> Filter</button>
               </form>
             </li>
-            <div class="mr-1">
-              <li class="nav nav-item ml-auto">
-                <a class="text-dark" href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
+            <div class="ml-auto">
+              <li class="nav nav-item ">
+                <a class="btn btn-outline-dark " href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
               </li>
             </div>
           </ul> 

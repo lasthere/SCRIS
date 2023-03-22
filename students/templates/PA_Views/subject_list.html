@@ -4,16 +4,16 @@
 
     {% if subs %}
     <div class="card bg-light m-1">
-      <h3 class="m-1 text-center text-dark">Subjects</h3>
+      <h3 class="text-center text-dark">Subjects</h3>
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
               <form  method="get">
-            {{ form.query }}<button type="submit">Search</button>
+            {{ form.query }}<button class="btn-outline-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
           </form>
             </li>
             <li class="nav-item ms-auto">
-              <a class="text-dark" style=" text-decoration: none;"href="{% url 'add_subject' %}"><i class="fa-solid fa-book"></i>+Subject</a>
+              <a class="btn btn-outline-dark" style=" text-decoration: none;"href="{% url 'add_subject' %}"><i class="fa-solid fa-book"></i>+Subject</a>
             </li>
           </ul>
         </div>
@@ -125,13 +125,18 @@
       </div>
     {% else %}
     <div class="card bg-light m-1">
+      <h3 class="text-center text-dark">Subjects</h3>
       <div class="card-header">
-        <i class="fa-solid fa-list fa-lg"></i> Subjects
-          <a style="float: right;"href="{% url 'add_subject' %}">
-            <i class="fa-solid fa-plus fa-lg "></i> Add Subjects
-          </a>
-
-      </div>  
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <form  method="get">
+                 {{ form.query }}<button class="btn-outline-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+              </form>
+            </li>
+            <li class="nav-item ms-auto">
+              <a class="btn btn-outline-dark" style=" text-decoration: none;"href="{% url 'add_subject' %}"><i class="fa-solid fa-book"></i>+Subject</a>
+            </li>
+          </ul>
       <h5 class="alert alert-primary m-1">No Subject Found</h5>
         <footer>
           <div class="text-center">
