@@ -27,6 +27,7 @@ yer =(
 
 class StudentSearchForm(forms.Form):
   query = forms.CharField(label='Search', max_length=100, required=False)
+  submit = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
 
 class StudentForm(forms.Form):
   student_number = forms.CharField(label="Student Number", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))

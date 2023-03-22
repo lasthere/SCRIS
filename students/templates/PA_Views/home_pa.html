@@ -1,5 +1,14 @@
 {% extends "PA_Views/base.html" %}
-
+<style >
+	.r::-webkit-scrollbar{
+		display: none;
+	}
+	.r{
+		height: 500px;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+</style>
 {% block body %}
 <div class="card bg-light ms-1 me-1 mb-1">
 	<div class="card-header text-light hal">
@@ -30,7 +39,7 @@
 		<div class="card-header text-light hal">
 			 <h4><i class="fa-solid fa-user-check"></i> Done?</h4>
 		</div>
-	    <div class="card-body" >
+	    <div class="r card-body" style="overflow:auto; max-height: 250px;" >
 	    	<p class="card-text ">
 			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Login</span></strong>
 			    <strong><span><br><i class="fa-solid fa-circle-dot"></i>Nav Bar</span></strong>

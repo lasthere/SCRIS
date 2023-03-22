@@ -52,7 +52,7 @@ def doLogin(request):
 
 
 # Students
-
+@login_required
 def hod_home(request):
   if request.user.user_type == '1':
     context = {
@@ -72,6 +72,26 @@ def home_pa(request):
     return render(request, 'PA_Views/home_pa.html')
   else:
     return render(request, 'login.html')
+
+@login_required
+def pa_profile(request):
+  if request.user.user_type == '2':
+    if request.method == 'POST':
+      pa_user = CustomUser.objects.get(id=request.user.id)
+      pa = ProgramAdvisor.objects.get(user_id=request.user.id)
+      form1 =EditProfile(request.POST, instance=pa_user)
+      if form1.is_valid():
+        form1.save()
+        return render(request, 'PA_Views/profile.html', {
+          'form1': form1,
+          'success': True
+        })
+    else:
+      pa_user = CustomUser.objects.get(pk=request.user.id)
+      form1 =EditProfile(instance=pa_user)
+  return render(request, 'PA_Views/profile.html', {
+    'form1': form1
+  })
 
 @login_required
 def home_student(request):
@@ -150,20 +170,6 @@ def student_index(request):
   else:
     return render(request, 'login.html')
 
-def student_search(request):
-  form = StudentSearchForm(request.GET)
-  if form.is_valid():
-    query = form.cleaned_data['query']
-    students = request.user.students.filter(first_name__icontains=query)
-  else:
-    students = None
-  return render(request, 'PA_Views/index.html', {
-    'students': students,
-    form:form,
-
-  })
-
-
 def home_ojt(request):
   if request.user.user_type == '4':
     context = {
@@ -181,20 +187,18 @@ def index(request):
   if year_level:
     students = Student.objects.filter(year_level=year_level)
 
-  form = StudentSearchForm(request.GET)
-  if form.is_valid():
-    query = form.cleaned_data['query']
-    students = Student.objects.filter(
-      Q(user__first_name__icontains=query)|
-      Q(user__last_name__icontains=query)|
-      Q(user__email__icontains=query)|
-      Q(year_level__icontains=query)|
-      Q(user__username__icontains=query)
+  form1 = StudentSearchForm(request.GET or None)
+  if form1.is_valid():
+    if form1.cleaned_data['submit']:
+      query = form1.cleaned_data['query']
+      students = Student.objects.filter(
+        Q(user__first_name__icontains=query) |
+        Q(user__last_name__icontains=query) |
+        Q(user__username__icontains=query)
       )
-
   return render(request, 'PA_Views/index.html', {
     'students': students,
-    'form':form,
+    'form1':form1,
 
   })
 

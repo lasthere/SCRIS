@@ -1,17 +1,17 @@
 {% extends "PA_Views/base.html" %}
 
 {% block body %}
-<h3 class="m-1 text-center" style="position:relative;">All Students</h3>
-
     {% if students %}
     <div class="card bg-light m-1">
+      <h3 class="text-center" style="position:relative;">All Students</h3>
     <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-              <form  method="get">{{ form.query }}<button type="submit">Search</button></form>
+              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button type="submit" name="submit" value="1">Search</button>
+              </form>
             </li>
             <li class="nav nav-item ml-auto mr-1">
-              <form style="float: right;"action="{% url 'index' %}" method="GET">
+              <form action="{% url 'index' %}" method="GET">
                 <select name="year_level" id="year_level">
                   <option value="">--Year Level--</option>
                   <option value="FRESHMAN">FRESHMAN</option>
@@ -131,28 +131,32 @@
     </div>
     {% else %}
     <div class="card bg-light m-1">
+      <h3 class="text-center" style="position:relative;">All Students</h3>
      <div class="card-header">
-          <a class="text-center text-dark" style="float: right;"href="{% url 'add' %}">
-            <i class="text-center text-dark fa-solid fa-user-plus"></i>Student</a>
-          </a>
-            <form class="ms-1"style="float: left;" method="get">
-                {{ form.query }}<button type="submit">Search</button>
-            </form>
-        <div class="me-1" style="float: right;">
-          <form action="{% url 'index' %}" method="GET">
-          <select name="year_level" id="year_level"> 
-            <option value="">------</option>
-            <option value="FRESHMAN">FRESHMAN</option>
-            <option value="SOPHOMORE">SOPHOMORE</option>
-            <option value="JUNIOR">JUNIOR</option>
-            <option value="SENIOR">SENIOR</option>
-          </select>
-          <button type="submit">Filter</button>
-        </form>
-        </div>
-        </div>
-      </div>  
-      <div >
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <form action="{% url 'index' %}" method="get">{{ form1.query }}<button type="submit" name="submit" value="1">Search</button>
+              </form>
+            </li>
+            <li class="nav nav-item ml-auto mr-1">
+              <form action="{% url 'index' %}" method="GET">
+                <select name="year_level" id="year_level">
+                  <option value="">--Year Level--</option>
+                  <option value="FRESHMAN">FRESHMAN</option>
+                  <option value="SOPHOMORE">SOPHOMORE</option>
+                  <option value="JUNIOR">JUNIOR</option>
+                  <option value="SENIOR">SENIOR</option>
+                </select>
+                <button type="submit">Filter</button>
+              </form>
+            </li>
+            <div class="mr-1">
+              <li class="nav nav-item ml-auto">
+                <a class="text-dark" href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
+              </li>
+            </div>
+          </ul> 
+      <div>
         <h5 class="alert alert-primary m-1">No Student Found</h5>
       </div>
        

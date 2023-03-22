@@ -11,9 +11,9 @@ urlpatterns = [
   path('doLogin/', views.doLogin, name="doLogin"),
   
   path('home_pa/', views.home_pa, name='home_pa'),
+  path('pa_profile/',views.pa_profile, name='pa_profile'),
 
-  path('search/',views.student_search, name='search'),
-  
+
   path('student/', views.index, name='index'),
   path('<int:id>', views.view_student, name='view_student'),
   path('add/', views.save_student, name='add'),
@@ -59,7 +59,7 @@ urlpatterns = [
   #student
   path('home_student/', views.home_student, name='home_student'),
   path('student_index/', views.student_index, name='student_index'),
-  path('students/year/<str:year_level>/', views.students_by_year_view, name='students_by_year'),
+
   path('student_profile/',views.student_profile, name='student_profile'),
 
   #sending mail
