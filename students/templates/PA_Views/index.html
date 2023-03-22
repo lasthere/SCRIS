@@ -5,24 +5,30 @@
 
     {% if students %}
     <div class="card bg-light m-1">
-      <div class="card-header">
-        <i class="fa-solid fa-list fa-lg"></i> Student Records
-        <a class="text-center text-dark"style="float: right;"href="{% url 'add' %}">
-            <i class="text-center fa-solid fa-user-plus"></i>Student</a>
-        <div class="btn-group" style="float: right; margin-right:2%;">
-          <form action="{% url 'index' %}" method="GET">
-          <select name="year_level" id="year_level">
-            <option value="">--Year Level--</option>
-            <option value="FRESHMAN">FRESHMAN</option>
-            <option value="SOPHOMORE">SOPHOMORE</option>
-            <option value="JUNIOR">JUNIOR</option>
-            <option value="SENIOR">SENIOR</option>
-          </select>
-          <button type="submit">Filter</button>
-        </form>
+    <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <form  method="get">{{ form.query }}<button type="submit">Search</button></form>
+            </li>
+            <li class="nav nav-item ml-auto mr-1">
+              <form style="float: right;"action="{% url 'index' %}" method="GET">
+                <select name="year_level" id="year_level">
+                  <option value="">--Year Level--</option>
+                  <option value="FRESHMAN">FRESHMAN</option>
+                  <option value="SOPHOMORE">SOPHOMORE</option>
+                  <option value="JUNIOR">JUNIOR</option>
+                  <option value="SENIOR">SENIOR</option>
+                </select>
+                <button type="submit">Filter</button>
+              </form>
+            </li>
+            <div class="mr-1">
+              <li class="nav nav-item ml-auto">
+                <a class="text-dark" href="{% url 'add' %}"><i class="text-center fa-solid fa-user-plus"></i>Student</a>
+              </li>
+            </div>
+          </ul>
         </div>
-        
-      </div>
       <div class="card-body">
           <div class="table-responsive">
             <table class="table table-hover">
@@ -126,13 +132,15 @@
     {% else %}
     <div class="card bg-light m-1">
      <div class="card-header">
-        <i class="fa-solid fa-list fa-lg"></i> Student Records
-          <a style="float: right;"href="{% url 'add' %}">
-            <i class="text-center fa-solid fa-user-plus"></i>Student</a>
+          <a class="text-center text-dark" style="float: right;"href="{% url 'add' %}">
+            <i class="text-center text-dark fa-solid fa-user-plus"></i>Student</a>
           </a>
-        <div class="btn-group me-1" style="float: right;">
+            <form class="ms-1"style="float: left;" method="get">
+                {{ form.query }}<button type="submit">Search</button>
+            </form>
+        <div class="me-1" style="float: right;">
           <form action="{% url 'index' %}" method="GET">
-          <select name="year_level" id="year_level">
+          <select name="year_level" id="year_level"> 
             <option value="">------</option>
             <option value="FRESHMAN">FRESHMAN</option>
             <option value="SOPHOMORE">SOPHOMORE</option>
@@ -143,7 +151,6 @@
         </form>
         </div>
         </div>
-
       </div>  
       <div >
         <h5 class="alert alert-primary m-1">No Student Found</h5>

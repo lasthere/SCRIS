@@ -12,6 +12,8 @@ urlpatterns = [
   
   path('home_pa/', views.home_pa, name='home_pa'),
 
+  path('search/',views.student_search, name='search'),
+  
   path('student/', views.index, name='index'),
   path('<int:id>', views.view_student, name='view_student'),
   path('add/', views.save_student, name='add'),

@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Q
 
 
 from django.conf import settings
@@ -15,7 +15,7 @@ from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, 
 import smtplib
 
 from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade
-from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile
+from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile,StudentSearchForm
 
 # Create your views here.
 # Login
@@ -150,6 +150,19 @@ def student_index(request):
   else:
     return render(request, 'login.html')
 
+def student_search(request):
+  form = StudentSearchForm(request.GET)
+  if form.is_valid():
+    query = form.cleaned_data['query']
+    students = request.user.students.filter(first_name__icontains=query)
+  else:
+    students = None
+  return render(request, 'PA_Views/index.html', {
+    'students': students,
+    form:form,
+
+  })
+
 
 def home_ojt(request):
   if request.user.user_type == '4':
@@ -163,16 +176,28 @@ def home_ojt(request):
   
 
 def index(request):
-
+  students = Student.objects.all()
   year_level = request.GET.get('year_level')
   if year_level:
     students = Student.objects.filter(year_level=year_level)
-  else:
-    students = Student.objects.all()
+
+  form = StudentSearchForm(request.GET)
+  if form.is_valid():
+    query = form.cleaned_data['query']
+    students = Student.objects.filter(
+      Q(user__first_name__icontains=query)|
+      Q(user__last_name__icontains=query)|
+      Q(user__email__icontains=query)|
+      Q(year_level__icontains=query)|
+      Q(user__username__icontains=query)
+      )
+
   return render(request, 'PA_Views/index.html', {
-    'students': students
+    'students': students,
+    'form':form,
 
   })
+
 
 def students_by_year_view(request):
   return render (request, 'PA_Views/index.hmtl',{
@@ -455,8 +480,17 @@ def edit_pa(request, id):
      #Subjects
 
 def subject_list(request):
+  subs= Subject.objects.all()
+  form = StudentSearchForm(request.GET)
+  if form.is_valid():
+    query = form.cleaned_data['query']
+    subs = Subject.objects.filter(
+      Q(subj_name__icontains=query)|
+      Q(subj_code__icontains=query)
+      )
   return render(request, 'PA_Views/subject_list.html', {
-    'subs': Subject.objects.all()
+    'subs': subs,
+    'form':form,
   })
 
 def view_subject(request, id):

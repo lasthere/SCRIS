@@ -41,7 +41,7 @@ class CustomUser(AbstractUser):
 
 
 class Student(models.Model):
-  user = models.OneToOneField(CustomUser,on_delete =models.CASCADE, primary_key=True)
+  user = models.OneToOneField(CustomUser,on_delete =models.CASCADE, primary_key=True,  related_name='students')
   student_number = models.CharField(max_length=50, null=True,blank=True)
   middle_initial = models.CharField(max_length=2, null=True, blank=True)
   year_level = models.CharField(max_length=50)

@@ -85,19 +85,19 @@
 
                 <div class="list-group list-group-flush">
                    {% url 'home_pa' as home_pa %}
-                    <a href="{{  home_pa }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == home_pa %} active {% endif %}">Home</a>
+                    <a href="{{  home_pa }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == home_pa %} active {% endif %}"><i class="fas fa-home"></i> Home</a>
 
                     {% url 'index' as index %}
-                    <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}">Student List</a>
+                    <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}"><i class="fas fa-user-graduate"></i> Student List</a>
 
                     {% url 'subject_list' as subject_list %}
-                    <a href="{{  subject_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == subject_list %} active {% endif %}">Subject List</a>
+                    <a href="{{  subject_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == subject_list %} active {% endif %}"><i class="fas fa-book-reader"></i> Subject List</a>
 
                     {% url 'contact_form' as contact_form %}
-                    <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}">Send Mail</a>
+                    <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}"><i class="fa-solid fa-envelope"></i> Send Mail</a>
 
                     {% url 'add_grade' as add_grade %}
-                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}">Add Grades</a>
+                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}"><i class="fa-solid fa-list"></i> Add Grades</a>
 
                     <a class="list-group-item list-group-item-action list-group-item-success p-3" href=#>Profile</a>
                 </div>

@@ -26,13 +26,13 @@
                 <tr>
                   <td width="1%" height="25">&nbsp;</td>
                   <td width="49%" valign="middle">Student ID: <strong>{{ user.username }} </strong></td>
-                  <td width="49%" valign="middle">Year: <strong>{{ user.student.year_level }}</strong></td>
+                  <td width="49%" valign="middle">Year: <strong>{{ user.students.year_level }}</strong></td>
                 </tr>
 
 
                  <tr>
                   <td width="1%" height="25">&nbsp;</td>
-                  <td width="49%" valign="middle">Student name: <strong>{{ user.student.user.first_name }} {{ user.student.user.last_name }} {{ user.student.middle_initial}}</strong></td>
+                  <td width="49%" valign="middle">Student name: <strong>{{ user.first_name }} {{ user.last_name }} {{ user.student.middle_initial}}</strong></td>
                   <td height="49">Curriculum Year :<strong> 2020 - 2021</strong></td>
                  
                 </tr>
