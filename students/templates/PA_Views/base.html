@@ -97,7 +97,7 @@
                     <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}"><i class="fa-solid fa-envelope"></i> Send Mail</a>
 
                     {% url 'add_grade' as add_grade %}
-                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}"><i class="fa-solid fa-list"></i> Add Grades</a>
+                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}"><i class="fa-solid fa-address-card fa-lg"></i> Add Grades</a>
 
                     {% url 'pa_profile' as pa_profile %}
                     <a href="{{  pa_profile }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == pa_profile %} active {% endif %}"><i class="fas fa-user"></i> Profile</a>

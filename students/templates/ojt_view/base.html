@@ -61,9 +61,9 @@
 
                 <div class="list-group list-group-flush">
                   {% url 'home_ojt' as home_ojt %}
-                  <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == home_ojt %} active {% endif %}" href="{{ home_ojt }}">Home</a>
+                  <a class="as list-group-item list-group-item-action list-group-item-success p-3{% if request.path == home_ojt %} active {% endif %}" href="{{ home_ojt }}">Home</a>
                   {% url 'ojt_index' as ojt_index %}
-                  <a class="as list-group-item list-group-item-action list-group-item p-3{% if request.path == ojt_index %} active {% endif %}" href="{{ ojt_index }}">Student List</a>
+                  <a class="as list-group-item list-group-item-action list-group-item-success p-3{% if request.path == ojt_index %} active {% endif %}" href="{{ ojt_index }}">Student List</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
