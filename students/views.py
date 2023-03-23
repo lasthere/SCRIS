@@ -8,14 +8,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Q
-
+from django.shortcuts import get_object_or_404
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, send_mass_mail
 import smtplib
 
-from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade
-from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile,StudentSearchForm
+from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade, Curriculum
+from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile,StudentSearchForm,CurriculumForm,AddSubjectForm
 
 # Create your views here.
 # Login
@@ -709,4 +709,56 @@ def add_grade(request):
     'students': Student.objects.all(),
     'subjects': Subject.objects.all()
   })
+
+def curriculum_list(request):
+  return render(request, 'PA_Views/curriculum_list.html', {
+    'curriculum': Curriculum.objects.all()
+  })
+
+def view_curriculum(request, id):
+  curriculum = Curriculum.objects.get(pk=id)
+  return HttpResponseRedirect(reverse('curriculum_list'))
+
+def delete_curriculum(request, id):
+  if request.method == 'POST':
+    curriculum = Curriculum.objects.get(pk=id)
+    curriculum.delete()
+  return HttpResponseRedirect(reverse('curriculum_list'))
+
+def new_curriculum(request):
+  if request.method == 'POST':
+    form = CurriculumForm(request.POST)
+    if form.is_valid():
+      curriculum_year = form.cleaned_data['curriculum_year']
+
+      newcurriculum = Curriculum(
+        curriculum_year=curriculum_year,
+        )
+      newcurriculum.save()
+
+      return render(request,'PA_Views/add_curriculum.html',{
+        form:CurriculumForm(),
+        'success':True
+        })
+  else:
+    form = CurriculumForm()
+  return render(request,'PA_Views/add_curriculum.html',{
+    'form':CurriculumForm()
+  })
+
+
+def curriculum_detail(request, curriculum_id):
+  curriculum = get_object_or_404(Curriculum, pk=curriculum_id)
+  added_subjects = curriculum.subjects.all()
+  if request.method == 'POST':
+    form = AddSubjectForm(added_subjects, request.POST)
+    if form.is_valid():
+      subjects = form.cleaned_data.get('subjects')
+      for subject in subjects:
+        if subject not in added_subjects:
+          curriculum.subjects.add(subject)
+      return redirect('curriculum_detail', curriculum_id=curriculum_id)
+  else:
+    form = AddSubjectForm(added_subjects)
+  return render(request, 'PA_Views/curriculum_details.html', {'curriculum': curriculum, 'form': form})
 

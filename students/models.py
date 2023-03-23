@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
+
 class Subject(models.Model):
   id = models.AutoField(primary_key=True)
   class YearLvl(models.TextChoices):
@@ -26,6 +27,7 @@ class Subject(models.Model):
   subj_units_lab =  models.FloatField(max_length=10, default=0.0)
   prerequisite = models.CharField(blank=True,max_length=50)
   semester_in_school = models.CharField(max_length=20, choices=SchlSemester.choices,default=SchlSemester.first_sem)
+  added_to_curriculum = models.BooleanField(default=False)
   school_year = models.CharField(max_length=50, default="2023-2024")
   yearlevel = models.CharField(max_length=3,choices=YearLvl.choices,default=YearLvl.FRESHMAN)
   objects = models.Manager()
@@ -33,6 +35,19 @@ class Subject(models.Model):
   def __str__(self):
     return f'{self.subj_code},  {self.subj_name} '
 
+class Curriculum(models.Model):
+  id = models.AutoField(primary_key=True)
+  curriculum_year = models.CharField(max_length=200, verbose_name="Curriculum Year")
+  subjects=models.ManyToManyField(Subject)
+
+  def add_subject(self,subject):
+    if not subject_added_to_curriculum:
+      self.subjects.add(subject)
+      subject.added_to_curriculum = True
+      subject.save()
+
+  def __str__(self):
+    return self.name
 
 class CustomUser(AbstractUser):
   user_type_data = ((1, "Hod"), (2, "PA"), (3, "Students"),(4, "Ojt_Officer"))
@@ -81,7 +96,6 @@ class Ojt_Officer(models.Model):
 class Prereq(models.Model):
   id = models.AutoField(primary_key=True)
   subject_id =models.ForeignKey(Subject, on_delete=models.CASCADE,null=True, verbose_name="Sub")
-  prerequisite =models.ManyToManyField(Subject, related_name='Subject_prerequisite')
   objects = models.Manager()
 
 

@@ -1,0 +1,33 @@
+{% extends "PA_Views/base.html" %}
+
+{% block body %}
+  <h3 class="text-center m-1">Add Curriculum</h3>
+  {% if success %}
+    <div class="alert alert-success" role="alert">
+      New Curriculum Year added successfully.
+      <a href="{% url 'curriculum_list' %}" class="alert-link">Curriculum List</a>
+      or
+      <a href="{% url 'new_curriculum' %}" class="alert-link">add more.</a>
+    </div>
+  {% else %}
+    <div class="row justify-content-center m-1">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa-solid fa-address-card fa-lg"></i> New Curriculum
+          </div>
+          <div class="card-body">
+            <form class="form-block" action="{% url 'new_curriculum' %}" method="POST">
+              {% csrf_token %}
+               <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-4 flex-column d-flex"> <label class="form-control-label px-3">Curriculum<span class="text-danger"> *</span></label> {{form.curriculum_year}} </div>
+              </div>
+               <div class="col text-center d-grid gap-2">
+                <button type="submit" class="btn btn-hal ">Add</button>
+                <a href="{% url 'curriculum_list' %}" class="btn btn-outline-secondary ">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  {% endif %}
+{% endblock %}

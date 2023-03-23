@@ -14,6 +14,13 @@ urlpatterns = [
   path('pa_profile/',views.pa_profile, name='pa_profile'),
 
 
+
+  path('curriculum/', views.curriculum_list, name='curriculum_list'),
+  path('delete_curriculum/<int:id>/', views.delete_curriculum, name='delete_curriculum'),
+  path('new_curriculum/',views.new_curriculum, name='new_curriculum'),
+  path('curriculum_detail/<int:curriculum_id>',views.curriculum_detail,name='curriculum_detail'),
+
+
   path('student/', views.index, name='index'),
   path('<int:id>', views.view_student, name='view_student'),
   path('add/', views.save_student, name='add'),

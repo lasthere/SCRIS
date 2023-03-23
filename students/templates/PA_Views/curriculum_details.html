@@ -1,0 +1,60 @@
+{% extends "PA_Views/base.html" %}
+
+{% block body %}
+<div class="row ms-1 me-1 mb-1">
+  <div class="card bg-light me-1 mb-1" style=" opacity: 0.9;">
+    <div class="card-header text-light hal">
+       <h4><i class="fas fa-bookr"></i> Curriculum</h4>
+    </div>
+      <div class="r card-body" style="overflow:auto; max-height: 300px;">
+        <p class="card-text ">
+          <strong>Curriculum Name:</strong> {{ curriculum.curriculum_year }}
+        </p>  
+       </div>
+   </div>
+ </div>
+    <div class="row justify-content-center m-1" style=" opacity: 0.9;">
+        <div class="card bg-light ">
+          <div class="hal card-header text-light">
+            <i class="fa-solid fa-book fa-lg"></i> Add Subject
+          </div>
+          <div class="card-body">
+            <form class="form-inline"action="{% url 'curriculum_detail' curriculum.id %}" method="POST">
+              <div class="form-check form-check-inline">
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="col">
+                    {{ form.as_p }}
+                  </div>
+                  
+                    <div class="col text-center d-grid gap-2">
+                      <button type="submit" class="btn btn-hal "><i class="fa-solid fa-book fa-lg"></i> Add Subject </button>
+                      <a href="{% url 'curriculum_list' %}" class="btn btn-outline-secondary ">Cancel</a>
+                    </div>
+              </div>
+              </form>
+          </div>
+        </div>
+      </div>
+ <div class="row ms-1 me-1 mb-1">
+  <div class="card bg-light me-1 mb-1" style=" opacity: 0.9;">
+    <div class="card-header text-light hal">
+       <h4><i class="fas fa-book-reader"></i> Subjects</h4>
+    </div>
+      <div class="r card-body" style="overflow:auto; max-height: 300px;">
+        <p class="card-text ">
+            <ul>
+              {% for subject in curriculum.subjects.all %}
+                <li>{{ subject.subj_name }} - {{ subject.subj_code }}</li>
+              {% empty %}
+                <li>No subjects added yet.</li>
+              {% endfor %}
+            </ul>
+              
+        </p>  
+       </div>
+   </div>
+ </div>
+
+
+{% endblock %}

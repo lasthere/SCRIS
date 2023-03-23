@@ -33,8 +33,13 @@
       .scroll::-webkit-scrollbar {
         display: none;
        }
-      .scroll {
+      .scroll, .scroll1{
         height: 500px;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+      .scroll1{
+        height: 100px;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
       }
@@ -67,8 +72,11 @@
       border-radius: #D4F1F4;
       color: black;
       opacity: 0.9;
-
     }
+
+      .no-bullet-list {
+      list-style-type: none;
+  }
 
     </style>
 
@@ -92,6 +100,9 @@
 
                     {% url 'subject_list' as subject_list %}
                     <a href="{{  subject_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == subject_list %} active {% endif %}"><i class="fas fa-book-reader"></i> Subject List</a>
+
+                    {% url 'curriculum_list' as curriculum_list %}
+                    <a href="{{  curriculum_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == curriculum_list %} active {% endif %}"><i class="fa-solid fa-chalkboard-user"></i> Curriculum List</a>
 
                     {% url 'contact_form' as contact_form %}
                     <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}"><i class="fa-solid fa-envelope"></i> Send Mail</a>

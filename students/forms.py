@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Form
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade
+from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade, Curriculum
 
 
 
@@ -161,7 +161,6 @@ class GradeForm(forms.ModelForm):
     model = SubjectGrade
     fields = ['subject_id','student_id', 'subject_grade','status']
 
-
     def clean_score(self):
       grade = self.cleaned_data['subject_grade']
       if grade < 0.0 or grade >= 5.0:
@@ -176,6 +175,26 @@ class GradeForm(forms.ModelForm):
       else:
         status = 'Fail'
       return status
-
-    clean_status
     clean_score
+    clean_status
+
+class CurriculumForm(forms.ModelForm):
+  class Meta:
+    model=Curriculum
+    fields=['curriculum_year']
+
+class AddSubjectForm(forms.Form):
+  subjects = forms.ModelMultipleChoiceField(
+    queryset=Subject.objects.all(),
+    widget=forms.CheckboxSelectMultiple(attrs={
+      'class': 'form-group',
+        }),
+    )
+
+  def __init__(self, added_subjects, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields['subjects'].queryset = Subject.objects.exclude(
+      id__in=[s.id for s in added_subjects]
+        )
+
+
