@@ -28,9 +28,6 @@
                   <th scope="col">Units Lec</th>
                   <th scope="col">Hours Lab</th>
                   <th scope="col">Units Lab</th>
-                  <th scope="col">Yr Level Taken</th>
-                  <th scope="col">Semester Taken</th>
-                  <th scope="col">School Year</th>
                   <th scope="col">Prerequisite</th>
                   <th scope="col">Actions</th>
 
@@ -45,9 +42,6 @@
                     <td >{{ subject.subj_units_lec }}</td>
                     <td >{{ subject.subj_hr_lab }}</td>
                     <td >{{ subject.subj_units_lab }}</td>
-                    <td >{{ subject.yearlevel }}</td>
-                    <td >{{ subject.semester_in_school }}</td>
-                    <td >{{ subject.school_year }}</td>
                     <td >{{ subject.prerequisite }}</td>
                     <td>
                       <button type="button" class="btn btn-success me-1" href="{% url 'view_subject' subject.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{subject.id}}">
@@ -74,9 +68,6 @@
                                 <li>Units Lec: <strong>{{ subject.subj_units_lec }}</strong></li>
                                 <li>Hours Lab: <strong>{{ subject.subj_hr_lab }}</strong></li>
                                 <li>Units Lab: <strong>{{ subject.subj_units_lab }}</strong></li>
-                                <li>Yr Taken: <strong>{{ subject.yearlevel }}</strong></li>
-                                <li>Sem Taken: <strong>{{ subject.semester_in_school }}</strong></li>
-                                <li>School Year: <strong>{{ subject.school_year }}</strong></li>
                                 <li>Prerequisite: <strong>{{ subject.prerequisite }}</strong></li>
                               </ul>
                             </div>

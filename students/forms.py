@@ -7,23 +7,12 @@ from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, Cu
 
 
 choice =(
-    ("FRESHMAN", "Freshmen"),
-    ("SOPHOMORE", "Sophomore"),
-    ("JUNIOR", "Junior"),
-    ("SENIOR", "Senior"),
-)
-
-sem =(
-    ("First Sem", "First Semester"),
-    ("Second Sem", "Second Semester"),
-)
-
-yer =(
-    ("I", "Freshmen"),
-    ("II", "Sophomore"),
+    ("I", "I"),
+    ("II", "II"),
     ("III", "III"),
     ("IV", "IV"),
 )
+
 
 class StudentSearchForm(forms.Form):
   query = forms.CharField(label='Search', max_length=100, required=False)
@@ -125,7 +114,7 @@ class HodForm(forms.ModelForm):
 class SubForm(forms.ModelForm):
   class Meta:
     model = Subject
-    fields = ['subj_code', 'subj_name','subj_hr_lec','subj_units_lec', 'subj_hr_lab', 'subj_units_lab','prerequisite','yearlevel','semester_in_school', 'school_year']
+    fields = ['subj_code', 'subj_name','subj_hr_lec','subj_units_lec', 'subj_hr_lab', 'subj_units_lab','prerequisite']
     labels = {
       'subj_code': 'Subject Code', 
       'subj_name': 'Subject Name', 
@@ -134,9 +123,6 @@ class SubForm(forms.ModelForm):
       'subj_hr_lab': 'Hours Lab',  
       'subj_units_lab': 'Units Lab', 
       'prerequisite': 'Prerequiste',
-      'yearlevel': 'Year Level', 
-      'school_year': 'S.Y.', 
-      'semester_in_school': 'Semester', 
       
     }
     widgets = {
@@ -147,9 +133,6 @@ class SubForm(forms.ModelForm):
       'subj_hr_lab': forms.NumberInput(attrs={'class': 'form-control'}), 
       'subj_units_lab': forms.NumberInput(attrs={'class': 'form-control'}), 
       'prerequisite': forms.TextInput(attrs={'class': 'form-control'}),
-      'yearlevel': forms.Select(choices=yer,attrs={'class': 'form-control'}),
-      'school_year': forms.TextInput(attrs={'class': 'form-control'}),
-      'semester_in_school': forms.Select(choices=sem,attrs={'class': 'form-control',}),
       
     }
 

@@ -181,36 +181,6 @@ def home_ojt(request):
     return render(request, 'login.html')
   
 
-def index(request):
-  students = Student.objects.all()
-  year_level = request.GET.get('year_level')
-  if year_level:
-    students = Student.objects.filter(year_level=year_level)
-
-  form1 = StudentSearchForm(request.GET or None)
-  if form1.is_valid():
-    if form1.cleaned_data['submit']:
-      query = form1.cleaned_data['query']
-      students = Student.objects.filter(
-        Q(user__first_name__icontains=query) |
-        Q(user__last_name__icontains=query) |
-        Q(user__username__icontains=query)
-      )
-  return render(request, 'PA_Views/index.html', {
-    'students': students,
-    'form1':form1,
-
-  })
-
-
-def students_by_year_view(request):
-  return render (request, 'PA_Views/index.hmtl',{
-    'students':Student.objects.filter(year_level=year_level)
-    })
-
-def view_student(request, id):
-  student = Student.objects.get(pk=id)
-  return HttpResponseRedirect(reverse('index'))
 
 def student_grades(request, user_id):
     student = Student.objects.get(user_id=user_id)
@@ -239,6 +209,30 @@ def student_grades(request, user_id):
       'ojtstatus':ojtstatus,
       })
 
+def index(request):
+  students = Student.objects.all()
+  year_level = request.GET.get('year_level')
+  if year_level:
+    students = Student.objects.filter(year_level=year_level)
+
+  form1 = StudentSearchForm(request.GET or None)
+  if form1.is_valid():
+    if form1.cleaned_data['submit']:
+      query = form1.cleaned_data['query']
+      students = Student.objects.filter(
+        Q(user__first_name__icontains=query) |
+        Q(user__last_name__icontains=query) |
+        Q(user__username__icontains=query)
+      )
+  return render(request, 'PA_Views/index.html', {
+    'students': students,
+    'form1':form1,
+
+  })
+
+def view_student(request, id):
+  student = Student.objects.get(pk=id)
+  return HttpResponseRedirect(reverse('index'))
 
 def save_student(request):
   if request.method == 'POST':
