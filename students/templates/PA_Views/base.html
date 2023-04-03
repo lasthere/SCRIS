@@ -89,7 +89,7 @@
 <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class=""  id="sidebar-wrapper">
-                <div class="hal sidebar-heading" style="color: whitesmoke;" ><strong>Program Adviser</strong></div>
+                <div class="bg-dark sidebar-heading" style="color: whitesmoke;" ><strong>Program Adviser</strong></div>
 
                 <div class="list-group list-group-flush">
                    {% url 'home_pa' as home_pa %}
@@ -97,9 +97,6 @@
 
                     {% url 'index' as index %}
                     <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}"><i class="fas fa-user-graduate"></i> Student List</a>
-
-                    {% url 'subject_list' as subject_list %}
-                    <a href="{{  subject_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == subject_list %} active {% endif %}"><i class="fas fa-book-reader"></i> Subject List</a>
 
                     {% url 'curriculum_list' as curriculum_list %}
                     <a href="{{  curriculum_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == curriculum_list %} active {% endif %}"><i class="fa-solid fa-chalkboard-user"></i> Curriculum List</a>
@@ -118,9 +115,9 @@
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->  
-                <nav class="navbar navbar-expand navbar-dark bg-dark">
+                <nav class="navbar navbar-expand navbar-white bg-dark">
                     <div class="container-fluid">
-                        <button class="hal btn" id="Toggle"><i class="fa fa-bars"></i></button>
+                        <button class="btn btn-dark" id="Toggle"><i class="fa fa-bars"></i></button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         {% if user.is_authenticated %}
                           <a class="btn btn-danger" href="{% url 'logout' %}" role="button">Logout</a>

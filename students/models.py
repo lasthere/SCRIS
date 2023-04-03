@@ -26,6 +26,15 @@ class Subject(models.Model):
 class Curriculum(models.Model):
   id = models.AutoField(primary_key=True)
   curriculum_year = models.CharField(max_length=200, verbose_name="Curriculum Year")
+  semester = models.CharField(max_length=250)
+  YEAR_LEVEL_CHOICES = [
+        ('1', 'First Year'),
+        ('2', 'Second Year'),
+        ('3', 'Third Year'),
+        ('4', 'Fourth Year'),
+    ]
+    
+  year_level = models.CharField(max_length=1, choices=YEAR_LEVEL_CHOICES)
   subjects=models.ManyToManyField(Subject)
 
   def add_subject(self,subject):
@@ -117,6 +126,16 @@ class SubjectGrade(models.Model):
 
   def __str__(self):
     return f'Student Suject Grades:{self.student_id}, {self.subject_grade}, {self.status}'
+
+class CurriculumSubject(models.Model):
+  curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
+  subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+  class Meta:
+    unique_together = ('curriculum', 'subject')
+
+  def __str__(self):
+    return f'{self.curriculum} - {self.subject}'
 
 
 @receiver(post_save, sender=CustomUser)

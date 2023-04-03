@@ -210,7 +210,8 @@ def student_grades(request, user_id):
       })
 
 def index(request):
-  students = Student.objects.all()
+  students = Student.objects.all().order_by('year_level','user__username','user__first_name','user__last_name','middle_initial') 
+
   year_level = request.GET.get('year_level')
   if year_level:
     students = Student.objects.filter(year_level=year_level)
@@ -227,6 +228,7 @@ def index(request):
   return render(request, 'PA_Views/index.html', {
     'students': students,
     'form1':form1,
+    'form': StudentForm(),
 
   })
 
@@ -235,31 +237,39 @@ def view_student(request, id):
   return HttpResponseRedirect(reverse('index'))
 
 def save_student(request):
-  if request.method == 'POST':
-    form = StudentForm(request.POST)
-    if form.is_valid():
-      username = form.cleaned_data['student_number']
-      password = form.cleaned_data['password']
-      first_name = form.cleaned_data['first_name']
-      last_name = form.cleaned_data['last_name']
-      middle_initial = form.cleaned_data['middle_initial']
-      email = form.cleaned_data['email']
-      year_level = form.cleaned_data['year_level']
-      middle_initial == middle_initial.upper()
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['student_number']
+            password = form.cleaned_data['password']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            middle_initial = form.cleaned_data['middle_initial']
+            email = form.cleaned_data['email']
+            year_level = form.cleaned_data['year_level']
+            middle_initial == middle_initial.upper()
 
-      user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
-      user.student.middle_initial=middle_initial
-      user.student.year_level=year_level
-      user.save()
-      messages.success(request, "Student Added Successfully!")
-      return render(request, 'PA_Views/add.html', {
-        'form': StudentForm(),
-        'success': True
-      })
-  else:
-    return render(request, 'PA_Views/add.html', {
-      'form': StudentForm()
-    })
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+            user.student.middle_initial=middle_initial
+            user.student.year_level=year_level
+            user.save()
+            message = 'Subject successfully added'
+            messages.success(request, message)
+            return HttpResponseRedirect(reverse('index'), {
+                'form': StudentForm(),
+                'message':message
+            })
+        else:
+            message='Failed to save!'
+            return HttpResponseRedirect(reverse('index'), {
+                'form': StudentForm(),
+                'message':message,
+            })
+    else:
+        return render(request, 'PA_Views/index.html', {
+            'form': StudentForm()
+        })
+
     
 def edit_student(request, id):
   if request.method == 'POST':
@@ -506,9 +516,6 @@ def add_subject(request):
       new_subj_units_lec = form.cleaned_data['subj_units_lec']
       new_subj_units_lab = form.cleaned_data['subj_units_lab']
       new_prerequisite = form.cleaned_data['prerequisite']
-      new_school_year = form.cleaned_data['school_year']
-      new_semester_in_school = form.cleaned_data['semester_in_school']
-      new_yearlevel = form.cleaned_data['yearlevel']
 
       new_Subj= Subject(
         subj_code = new_subj_code,
@@ -518,10 +525,6 @@ def add_subject(request):
         subj_units_lec = new_subj_units_lec,
         subj_units_lab = new_subj_units_lab,
         prerequisite = new_prerequisite,
-        school_year = new_school_year,
-        semester_in_school = new_semester_in_school,
-        yearlevel = new_yearlevel,
-
       )
       new_Subj.save()
       return render(request, 'PA_Views/add_subject.html', {
@@ -706,7 +709,8 @@ def add_grade(request):
 
 def curriculum_list(request):
   return render(request, 'PA_Views/curriculum_list.html', {
-    'curriculum': Curriculum.objects.all()
+    'curriculum': Curriculum.objects.all().order_by('-curriculum_year', 'year_level', 'semester'),
+    'form':CurriculumForm(request.POST),
   })
 
 def view_curriculum(request, id):
@@ -724,26 +728,42 @@ def new_curriculum(request):
     form = CurriculumForm(request.POST)
     if form.is_valid():
       curriculum_year = form.cleaned_data['curriculum_year']
+      year_level = form.cleaned_data['year_level']
+      semester = form.cleaned_data['semester']
+      if Curriculum.objects.filter(curriculum_year=curriculum_year, year_level=year_level, semester=semester).exists():
 
-      newcurriculum = Curriculum(
-        curriculum_year=curriculum_year,
-        )
-      newcurriculum.save()
-
-      return render(request,'PA_Views/add_curriculum.html',{
-        form:CurriculumForm(),
-        'success':True
+        emessage = 'Curriculum already exists!'
+        return render(request,'PA_Views/curriculum_list.html',{
+          'curriculum': Curriculum.objects.all().order_by('-curriculum_year', 'year_level', 'semester'),
+          'emessage':emessage,
+          'form':CurriculumForm()
         })
+      else:
+        newcurriculum = Curriculum(
+          curriculum_year=curriculum_year,
+          year_level=year_level,
+          semester=semester,
+          )
+        newcurriculum.save()
+        message = 'Successfully added!'
+
+        return render(request,'PA_Views/curriculum_list.html',{
+          'curriculum': Curriculum.objects.all().order_by('-curriculum_year', 'year_level', 'semester'),
+          'message':message,
+          'form':CurriculumForm()
+          })
   else:
     form = CurriculumForm()
-  return render(request,'PA_Views/add_curriculum.html',{
+  return render(request,'PA_Views/add_curriculum.html',{\
     'form':CurriculumForm()
   })
 
 
-def curriculum_detail(request, curriculum_id):
+def curriculum_detail(request, curriculum_id, message=None):
   curriculum = get_object_or_404(Curriculum, pk=curriculum_id)
   added_subjects = curriculum.subjects.all()
+  subject_count = Subject.objects.filter(curriculum=curriculum).count()
+  total_units = Subject.objects.filter(curriculum=curriculum).aggregate(total_units=Sum('subj_units_lec')+Sum('subj_units_lab'))['total_units']
   if request.method == 'POST':
     form = AddSubjectForm(added_subjects, request.POST)
     if form.is_valid():
@@ -754,5 +774,65 @@ def curriculum_detail(request, curriculum_id):
       return redirect('curriculum_detail', curriculum_id=curriculum_id)
   else:
     form = AddSubjectForm(added_subjects)
-  return render(request, 'PA_Views/curriculum_details.html', {'curriculum': curriculum, 'form': form})
+  return render(request, 'PA_Views/curriculum_details.html', {
+    'curriculum': curriculum, 
+    'form': form, 
+    'subject_count':subject_count,
+    'total_units':total_units,
+    })
+
+
+def add_subject_to_curriculum(request, curriculum_id):
+    curriculum = Curriculum.objects.get(id=curriculum_id)
+    if request.method == 'POST':
+        subj_code = request.POST['subj_code']
+        subj_name = request.POST['subj_name']
+        subj_hr_lec = request.POST['subj_hr_lec']
+        subj_hr_lab = request.POST['subj_hr_lab']
+        subj_units_lec = request.POST['subj_units_lec']
+        subj_units_lab = request.POST['subj_units_lab']
+        prerequisite = request.POST['prerequisite']
+
+        similar_subjects = curriculum.subjects.filter(Q(subj_code=subj_code) | Q(subj_name=subj_name))
+        if similar_subjects.exists():
+            message = 'Subject already exists'
+            messages.error(request, message, extra_tags='danger')
+        else:
+            # Create new subject and add to curriculum
+            subject = Subject.objects.create(
+                subj_code=subj_code,
+                subj_name=subj_name,
+                subj_hr_lec=subj_hr_lec,
+                subj_hr_lab=subj_hr_lab,
+                subj_units_lec=subj_units_lec,
+                subj_units_lab=subj_units_lab,
+                prerequisite=prerequisite,
+                added_to_curriculum=True,
+            )
+            curriculum.subjects.add(subject)
+            message = 'Subject successfully added'
+            messages.success(request, message)
+
+        redirect_url = reverse('curriculum_detail', kwargs={'curriculum_id': curriculum_id})
+        if message:
+            redirect_url += f'?message={message}'
+        return redirect(redirect_url)
+
+    return render(request, 'PA_Views/curriculum_details.html', {'curriculum': curriculum})
+
+
+
+def delete_subject_curriculum(request, curriculum_id, subject_id):
+  if request.method == 'POST':
+    curriculum = get_object_or_404(Curriculum, id=curriculum_id)
+    subject = get_object_or_404(Subject, id=subject_id)
+
+    if subject in curriculum.subjects.all():
+        curriculum.subjects.remove(subject)
+        subject.added_to_curriculum = False
+        subject.save()
+
+  return HttpResponseRedirect(reverse('curriculum_detail', args=[curriculum.id]))
+
+
 
