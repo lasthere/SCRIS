@@ -20,6 +20,7 @@ urlpatterns = [
   path('new_curriculum/',views.new_curriculum, name='new_curriculum'),
   path('curriculum_detail/<int:curriculum_id>',views.curriculum_detail,name='curriculum_detail'),
   path('curriculum/<int:curriculum_id>/delete_subject/<int:subject_id>/', views.delete_subject_curriculum, name='delete_subject_curriculum'),
+  path('curriculum/<int:curriculum_id>/edit_subject/<int:subject_id>/', views.edit_subject_curriculum, name='edit_subject_curriculum'),
 
 
   path('student/', views.index, name='index'),

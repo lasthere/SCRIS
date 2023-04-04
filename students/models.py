@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
-
 class Subject(models.Model):
     subj_code = models.CharField(max_length=10)
     subj_name = models.CharField(max_length=255)
@@ -15,7 +14,7 @@ class Subject(models.Model):
     subj_units_lec = models.FloatField(max_length=10, default=0.0)
     subj_units_lab = models.FloatField(max_length=10, default=0.0)
     added_to_curriculum = models.BooleanField(default=False)
-    prerequisites = models.ManyToManyField('Prerequisite', blank=True, related_name='related_subjects')
+    prerequisites = models.ManyToManyField('Prerequisite', related_name='related_subjects')
 
     def __str__(self):
         return f'{self.subj_code},  {self.subj_name}'
@@ -42,11 +41,6 @@ class Curriculum(models.Model):
   year_level = models.CharField(max_length=1, choices=YEAR_LEVEL_CHOICES)
   subjects=models.ManyToManyField(Subject)
 
-  def add_subject(self,subject):
-    if not subject_added_to_curriculum:
-      self.subjects.add(subject)
-      subject.added_to_curriculum = True
-      subject.save()
 
 class CustomUser(AbstractUser):
   user_type_data = ((1, "Hod"), (2, "PA"), (3, "Students"),(4, "Ojt_Officer"))

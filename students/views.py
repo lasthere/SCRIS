@@ -800,7 +800,6 @@ def add_subject_to_curriculum(request, curriculum_id, subject_id=None):
             message = 'Subject already exists'
             messages.error(request, message, extra_tags='danger')
         else:
-            # Create new subject and add to curriculum
             subject = Subject.objects.create(
                 subj_code=subj_code,
                 subj_name=subj_name,
@@ -811,44 +810,33 @@ def add_subject_to_curriculum(request, curriculum_id, subject_id=None):
                 added_to_curriculum=True,
             )
             for prereq_id in prerequisites:
-                prereq_subject = Subject.objects.get(id=prereq_id)
-                Prerequisite.objects.create(
-                    subject=subject,
-                    prerequisite=prereq_subject
-                )
-
+              prereq_subject = Subject.objects.get(id=int(prereq_id))
+              Prerequisite.objects.create(
+                  subject=subject,
+                  prerequisite=prereq_subject
+              )
             curriculum.subjects.add(subject)
             message = 'Subject successfully added'
             messages.success(request, message)
-
+           
         redirect_url = reverse('curriculum_detail', kwargs={'curriculum_id': curriculum_id})
         redirect_url += f'?message={message}'
         return redirect(redirect_url)
 
     if subject_id:
         subject = get_object_or_404(Subject, id=subject_id)
-        prerequisites = subject.prerequisite_set.all()
+        prerequisites = subject.prerequisites.all()
     else:
+        subject = None
         prerequisites = None
+        
     subjects = Subject.objects.all()
     return render(request, 'PA_Views/curriculum_details.html', {
       'curriculum': curriculum, 
       'subjects': subjects, 
-      'prerequisites':prerequisites
+      'subject': subject,
+      'prerequisites': prerequisites
       })
-
-
-def view_subject_prerequisites(request, curriculum_id, subject_id):
-    curriculum = get_object_or_404(Curriculum, id=curriculum_id)
-    subject = get_object_or_404(Subject, id=subject_id)
-
-    prerequisites = subject.prerequisites.all()
-
-    return render(request, 'PA_Views/curriculum_details.html', {
-        'curriculum': curriculum,
-        'subject': subject,
-        'prerequisites': prerequisites,
-    })
 
 
 def delete_subject_curriculum(request, curriculum_id, subject_id):
@@ -865,3 +853,25 @@ def delete_subject_curriculum(request, curriculum_id, subject_id):
 
 
 
+def edit_subject_curriculum(request, curriculum_id, subject_id):
+  if request.method == 'POST':
+    curriculum = get_object_or_404(Curriculum, id=curriculum_id)
+    subject = get_object_or_404(Subject, id=subject_id)
+    form = SubForm(request.POST, instance=subject)
+
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('curriculum_detail', args=[curriculum.id]), {
+        'form': form,
+        'success': True
+    })
+  else:
+    subject = Subject.objects.get(pk=id)
+    form = SubForm(instance=subject)
+  return render(request, 'PA_Views/curriculum_detail.html', {
+    'form': form,
+    'curriculum': curriculum, 
+    'subjects': subjects, 
+    'subject': subject,
+    'prerequisites': prerequisites
+  })

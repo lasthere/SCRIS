@@ -173,11 +173,29 @@ class HodForm(forms.ModelForm):
     last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
 
 class PrerequisiteForm(forms.ModelForm):
-    prerequisites = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), label="prerequisites",
-    widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input', 'placeholder':'Prerequiste:'}))
+    prerequisites = forms.ModelMultipleChoiceField(
+        queryset=Subject.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        label="Prerequisites",
+    )
+    prerequisite = forms.CharField(max_length=50, label="Additional Prerequisite", required=False)
+
     class Meta:
         model = Prerequisite
         fields = ('prerequisite', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['prerequisites'].initial = self.instance.subject_set.all()
+
+    def save(self, commit=True):
+        prerequisite = super().save(commit=False)
+        if commit:
+            prerequisite.save()
+        if self.cleaned_data['prerequisites']:
+            prerequisite.subject_set.set(self.cleaned_data['prerequisites'])
+        return prerequisite
 
 class SubForm(forms.ModelForm):
   

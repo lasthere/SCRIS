@@ -60,25 +60,23 @@
                 </tr>
               </thead>
               <tbody>
-                {% for subject in curriculum.subjects.all %}
-                <tr>
-                    <td>{{ subject.id }}</td>
-                    <td>{{ subject.subj_code }}</td>
-                    <td>{{ subject.subj_name }}</td>
-                    <td>{{ subject.subj_hr_lec }}</td>
-                    <td>{{ subject.subj_units_lec }}</td>
-                    <td>{{ subject.subj_hr_lab }}</td>
-                    <td>{{ subject.subj_units_lab }}</td>
-                    <td>
-                      {% if subject.prerequisites.count > 0 %}
-                        <ul>
-                          {% for prerequisite in subject.prerequisites.all %}
-                            <li>{{ prerequisite.prerequisite }}</li>
-                          {% endfor %}
-                        </ul>
-                      {% else %}
-                        None
-                      {% endif %}
+                  {% for subject in curriculum.subjects.all %}
+                  <tr class="clickable-row " data-href="{% url 'edit_subject_curriculum' curriculum.id subject.id%}">
+                      <td>{{ subject.id }}</td>
+                      <td>{{ subject.subj_code }}</td>
+                      <td>{{ subject.subj_name }}</td>
+                      <td>{{ subject.subj_hr_lec }}</td>
+                      <td>{{ subject.subj_units_lec }}</td>
+                      <td>{{ subject.subj_hr_lab }}</td>
+                      <td>{{ subject.subj_units_lab }}</td>
+                      <td>
+                      {% for prerequisite in subject.prerequisite_set.all %}
+                        {{ prerequisite.prerequisite }}<br>
+                        {% for related_subject in prerequisite.subject.related_subjects.all %}
+                           <br><p>{{ related_subject.subj_code }}-{{ related_subject.subj_name }}</p> 
+                        {% endfor %}
+
+                     {% endfor %}
                     </td>
                     </td>
                     <td>
