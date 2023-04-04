@@ -14,7 +14,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, BadHeaderError, send_mail, send_mass_mail
 import smtplib
 
-from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade, Curriculum
+from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade, Curriculum, Prerequisite
 from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,GradeForm,EditProfile,StudentSearchForm,CurriculumForm,AddSubjectForm
 
 # Create your views here.
@@ -534,7 +534,7 @@ def add_subject(request):
   else:
     form = SubForm()
   return render(request, 'PA_Views/add_subject.html', {
-    'form': SubForm()
+    'form': form,
   })
 
 def delete_subject(request, id):
@@ -761,6 +761,7 @@ def new_curriculum(request):
 
 def curriculum_detail(request, curriculum_id, message=None):
   curriculum = get_object_or_404(Curriculum, pk=curriculum_id)
+  subjects= Subject.objects.all()
   added_subjects = curriculum.subjects.all()
   subject_count = Subject.objects.filter(curriculum=curriculum).count()
   total_units = Subject.objects.filter(curriculum=curriculum).aggregate(total_units=Sum('subj_units_lec')+Sum('subj_units_lab'))['total_units']
@@ -779,10 +780,11 @@ def curriculum_detail(request, curriculum_id, message=None):
     'form': form, 
     'subject_count':subject_count,
     'total_units':total_units,
+    'subjects':subjects,
     })
 
 
-def add_subject_to_curriculum(request, curriculum_id):
+def add_subject_to_curriculum(request, curriculum_id, subject_id=None):
     curriculum = Curriculum.objects.get(id=curriculum_id)
     if request.method == 'POST':
         subj_code = request.POST['subj_code']
@@ -791,7 +793,7 @@ def add_subject_to_curriculum(request, curriculum_id):
         subj_hr_lab = request.POST['subj_hr_lab']
         subj_units_lec = request.POST['subj_units_lec']
         subj_units_lab = request.POST['subj_units_lab']
-        prerequisite = request.POST['prerequisite']
+        prerequisites = request.POST.getlist('prerequisite[]')
 
         similar_subjects = curriculum.subjects.filter(Q(subj_code=subj_code) | Q(subj_name=subj_name))
         if similar_subjects.exists():
@@ -806,20 +808,47 @@ def add_subject_to_curriculum(request, curriculum_id):
                 subj_hr_lab=subj_hr_lab,
                 subj_units_lec=subj_units_lec,
                 subj_units_lab=subj_units_lab,
-                prerequisite=prerequisite,
                 added_to_curriculum=True,
             )
+            for prereq_id in prerequisites:
+                prereq_subject = Subject.objects.get(id=prereq_id)
+                Prerequisite.objects.create(
+                    subject=subject,
+                    prerequisite=prereq_subject
+                )
+
             curriculum.subjects.add(subject)
             message = 'Subject successfully added'
             messages.success(request, message)
 
         redirect_url = reverse('curriculum_detail', kwargs={'curriculum_id': curriculum_id})
-        if message:
-            redirect_url += f'?message={message}'
+        redirect_url += f'?message={message}'
         return redirect(redirect_url)
 
-    return render(request, 'PA_Views/curriculum_details.html', {'curriculum': curriculum})
+    if subject_id:
+        subject = get_object_or_404(Subject, id=subject_id)
+        prerequisites = subject.prerequisite_set.all()
+    else:
+        prerequisites = None
+    subjects = Subject.objects.all()
+    return render(request, 'PA_Views/curriculum_details.html', {
+      'curriculum': curriculum, 
+      'subjects': subjects, 
+      'prerequisites':prerequisites
+      })
 
+
+def view_subject_prerequisites(request, curriculum_id, subject_id):
+    curriculum = get_object_or_404(Curriculum, id=curriculum_id)
+    subject = get_object_or_404(Subject, id=subject_id)
+
+    prerequisites = subject.prerequisites.all()
+
+    return render(request, 'PA_Views/curriculum_details.html', {
+        'curriculum': curriculum,
+        'subject': subject,
+        'prerequisites': prerequisites,
+    })
 
 
 def delete_subject_curriculum(request, curriculum_id, subject_id):

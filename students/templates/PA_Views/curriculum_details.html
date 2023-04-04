@@ -12,6 +12,7 @@
     border-radius: .25rem;
 }
 </style>
+
 <div class="row ms-1 me-1 mt-1">
   <div class="card bg-light me-1">
     <div class="card-header text-light hal">
@@ -60,15 +61,26 @@
               </thead>
               <tbody>
                 {% for subject in curriculum.subjects.all %}
-                  <tr>
+                <tr>
                     <td>{{ subject.id }}</td>
-                    <td >{{ subject.subj_code }}</td>
-                    <td >{{ subject.subj_name }}</td>
-                    <td >{{ subject.subj_hr_lec }}</td>
-                    <td >{{ subject.subj_units_lec }}</td>
-                    <td >{{ subject.subj_hr_lab }}</td>
-                    <td >{{ subject.subj_units_lab }}</td>
-                    <td >{{ subject.prerequisite }}</td>
+                    <td>{{ subject.subj_code }}</td>
+                    <td>{{ subject.subj_name }}</td>
+                    <td>{{ subject.subj_hr_lec }}</td>
+                    <td>{{ subject.subj_units_lec }}</td>
+                    <td>{{ subject.subj_hr_lab }}</td>
+                    <td>{{ subject.subj_units_lab }}</td>
+                    <td>
+                      {% if subject.prerequisites.count > 0 %}
+                        <ul>
+                          {% for prerequisite in subject.prerequisites.all %}
+                            <li>{{ prerequisite.prerequisite }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                    </td>
                     <td>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{subject.id}}">
                         <i class="fa-solid fa-trash-can fa-lg"></i>
@@ -125,9 +137,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row g-2">
-            
-          </div>
           <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingInput" name="subj_code" placeholder="Subject Code:" required>
               <label for="floatingInput">Subject Code:</label>
@@ -148,14 +157,19 @@
             <input type="number" class="form-control" id="subj_units_lec" name="subj_units_lec" min="0" step="1" placeholder="Units of Lecture:" required>
             <label for="subj_units_lec">Units of Lecture:</label>
           </div>
-          <div class="form-floating mb-3">
+            <div class="form-floating mb-3">
             <input type="number" class="form-control" id="subj_units_lab" name="subj_units_lab" min="0" step="1" placeholder="Units of Laboratory:" required>
             <label for="subj_units_lab">Units of Laboratory:</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="prerequisite" name="prerequisite" placeholder="Prerequisite:">
+            <select class="form-select" id="prerequisites" name="prerequisite[]" size="3"  multiple>
+              {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.subj_name }}</option>
+              {% endfor %}
+            </select>
             <label for="prerequisite">Prerequisite:</label>
           </div>
+            
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

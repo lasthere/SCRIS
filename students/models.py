@@ -8,20 +8,25 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Subject(models.Model):
-  id = models.AutoField(primary_key=True)
+    subj_code = models.CharField(max_length=10)
+    subj_name = models.CharField(max_length=255)
+    subj_hr_lec = models.FloatField(max_length=10, default=0.0)
+    subj_hr_lab = models.FloatField(max_length=10, default=0.0)
+    subj_units_lec = models.FloatField(max_length=10, default=0.0)
+    subj_units_lab = models.FloatField(max_length=10, default=0.0)
+    added_to_curriculum = models.BooleanField(default=False)
+    prerequisites = models.ManyToManyField('Prerequisite', blank=True, related_name='related_subjects')
 
-  subj_code = models.CharField(max_length=10)
-  subj_name = models.CharField(max_length=255)
-  subj_hr_lec = models.FloatField(max_length=10, default=0.0)
-  subj_hr_lab = models.FloatField(max_length=10, default=0.0)
-  subj_units_lec = models.FloatField(max_length=10, default=0.0)
-  subj_units_lab =  models.FloatField(max_length=10, default=0.0)
-  prerequisite = models.CharField(blank=True,max_length=50)
-  added_to_curriculum = models.BooleanField(default=False)
-  objects = models.Manager()
+    def __str__(self):
+        return f'{self.subj_code},  {self.subj_name}'
 
-  def __str__(self):
-    return f'{self.subj_code},  {self.subj_name} '
+class Prerequisite(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='prerequisite_set')
+    prerequisite = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'{self.prerequisite}'
+
 
 class Curriculum(models.Model):
   id = models.AutoField(primary_key=True)
@@ -83,22 +88,6 @@ class Ojt_Officer(models.Model):
 
 #ang sa tables na nin dapita
 
-
-
-
-
-class Prereq(models.Model):
-  id = models.AutoField(primary_key=True)
-  subject_id =models.ForeignKey(Subject, on_delete=models.CASCADE,null=True, verbose_name="Sub")
-  objects = models.Manager()
-
-
-  def get_absolute_url(self):
-    return reverse('Prereq-details',args[str(self.id)])
-
-
-  def get_prerequisite(self):
-    return "\n".join([p.prerequisite for p in self.prerequisite.all()])
 
 #grading system
 

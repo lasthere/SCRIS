@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Form
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade, Curriculum
+from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade, Curriculum, Prerequisite
 
 
 
@@ -172,13 +172,18 @@ class HodForm(forms.ModelForm):
     first_name = forms.CharField(label="first_name", widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
 
-
-
+class PrerequisiteForm(forms.ModelForm):
+    prerequisites = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), label="prerequisites",
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input', 'placeholder':'Prerequiste:'}))
+    class Meta:
+        model = Prerequisite
+        fields = ('prerequisite', )
 
 class SubForm(forms.ModelForm):
+  
   class Meta:
     model = Subject
-    fields = ['subj_code', 'subj_name','subj_hr_lec','subj_units_lec', 'subj_hr_lab', 'subj_units_lab','prerequisite']
+    fields = ['subj_code', 'subj_name','subj_hr_lec','subj_units_lec', 'subj_hr_lab', 'subj_units_lab']
 
     widgets = {
       'subj_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Subject Code:'}),
@@ -187,7 +192,6 @@ class SubForm(forms.ModelForm):
       'subj_units_lec': forms.NumberInput(attrs={'class': 'form-control', 'placeholder':'Units Lecture:'}),  
       'subj_hr_lab': forms.NumberInput(attrs={'class': 'form-control', 'placeholder':'Hours Laboratory:'}), 
       'subj_units_lab': forms.NumberInput(attrs={'class': 'form-control', 'placeholder':'Units Laboratory:'}), 
-      'prerequisite': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Prerequiste:'}),
       
     }
     labels = {
@@ -197,7 +201,6 @@ class SubForm(forms.ModelForm):
       'subj_units_lec': 'Units Lec',
       'subj_hr_lab': 'Hours Lab',  
       'subj_units_lab': 'Units Lab', 
-      'prerequisite': 'Prerequiste',
       
     }
 
