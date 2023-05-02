@@ -13,7 +13,7 @@ from django.db import transaction
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.http import JsonResponse
-from django_pglocks import advisory_lock
+
 from django.forms import formset_factory
 from django.views.decorators.http import require_POST
 
