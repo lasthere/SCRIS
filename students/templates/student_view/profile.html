@@ -11,15 +11,16 @@
     </div>
   {% else %}
     <div class="row justify-content-center ">
-        <div class="card bg-light">
-          <div class="ba card-header text-light">
+        <div class="card text-dark shadow">
+          <div class="card-header ">
             <h4><i class="fa-solid fa-pen-to-square fa-lg"></i> {{ user.first_name }} {{ user.last_name }} Profile
           </div>
           <div class="card-body form-floating mb-3">
             <form class="form-floating"action="" method="POST">
               {% csrf_token %}
+
               <div class="form-floating m-1">
-              	<div class="row justify-content-between text-left">
+              	<div class="row text-left">
 	                <div class="form-group col-sm-4 flex-column d-flex text-center"> <label class="form-control-label px-3">Username/StudentID<span class="text-danger"> *</span></label>{{ user.username }} </div>
 	                <div class="form-group col-sm-4 flex-column d-flex text-center"> <label class="form-control-label px-3">Password<span class="text-danger"> *</span></label> {{form1.password}} </div>
 	                <div class="form-group col-sm-4 flex-column d-flex text-center"> <label class="form-control-label px-3">Email<span class="text-danger"> *</span></label> {{form1.email}} </div>
@@ -27,7 +28,7 @@
               </div>
 
                <div class="col text-center d-grid gap-2">
-                <button type="submit" class="btn as">Update</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{% url 'home_student' %}" class="btn btn-outline-secondary ">Cancel</a>
               </div>
 

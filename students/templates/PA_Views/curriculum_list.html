@@ -3,15 +3,16 @@
 {% block body %}
     {% if curriculum %}
     <div class="card bg-light m-1">
-      <h3 class="text-center" style="position:relative;">Curriculum</h3>
+      <h3 class="justify-content-center text-center" style="position:relative;">Curriculum</h3>
     <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
+
               <form action="{% url 'curriculum_list' %}" method="get">{{ form1.query }}<button class="btn-outline-secondary" type="submit" name="submit" value="1"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
               </form>
             </li>
             <div class="ml-auto">
-              <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#addSubjectModal">
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSubjectModal">
                   <i class="fa-solid fa-plus"></i> Add Curriculum
               </button>
             </div>
@@ -30,18 +31,22 @@
             <table class="table table-hover">
               <thead>
                 <tr >
+                  <th scope="col">ID</th>
                   <th scope="col">Curriculum</th>
-                  <th scope="col">Year</th>
-                  <th scope="col">Semester</th>
+                  <th scope="col">Total Year Level</th>
+                  <th scope="col">Total Subjects</th>
                   <th scope="col">Action</th>
+                  
                 </tr>
               </thead>
               <tbody>
                 {% for curriculums in curriculum %}
                  <tr class="clickable-row " data-href="{% url 'curriculum_detail' curriculums.id%}">
+                <td >{{ curriculums.id }}</td>
                 <td >{{ curriculums.curriculum_year }}</td>
-                <td >{{ curriculums.year_level }}</td>
-                <td >{{ curriculums.semester }}</td>
+                <td >{{ curriculums.year_levels.count  }}</td>
+                <td >{{ curriculums.subjects.count  }}</td>
+
                 <td>
                       <button type="button" class="exclude-cell btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{curriculum.id}}">
                         <i class="fa-solid fa-trash-can fa-lg"></i>
@@ -85,7 +90,7 @@
               <form method="POST" action="{% url 'new_curriculum' %}">
                 {% csrf_token %}
                 <div class="modal-header">
-                  <h5 class="modal-title" id="addSubjectModalLabel">Add Subject to Curriculum</h5>
+                  <h5 class="modal-title" id="addSubjectModalLabel">Create Curriculum</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -95,18 +100,10 @@
                       <input type="text" class="form-control" id="curriculum_year" name="curriculum_year" placeholder="Curriculum Name:" required>
                       <label for="subj_name">Curriculum Name:</label>
                   </div>
-                  <div class="form-floating mb-3">
-                    {{ form.year_level }}
-                    <label for="{{ form.year_level.id_for_label }}"> Year Level</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    {{ form.semester }}
-                    <label for="{{ form.semester.id_for_label }}"> Semester</label>
-                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Subject</button>
+                  <button type="submit" class="btn btn-primary">Create</button>
                 </div>
               </form>
             </div>
@@ -125,7 +122,9 @@
             </li>
             <div class="ml-auto">
               <li class="nav nav-item ">
-                <a class="btn btn-success" href="{% url 'new_curriculum' %}"><i class="fa-solid fa-plus"></i> Curriculum</a>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSubjectModal">
+                  <i class="fa-solid fa-plus"></i> Add Curriculum
+              </button> 
               </li>
             </div>
           </ul> 
@@ -141,7 +140,7 @@
               <form method="POST" action="{% url 'new_curriculum' %}">
                 {% csrf_token %}
                 <div class="modal-header">
-                  <h5 class="modal-title" id="addSubjectModalLabel">Add Subject to Curriculum</h5>
+                  <h5 class="modal-title" id="addSubjectModalLabel"> Create Curriculum</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -151,18 +150,10 @@
                       <input type="text" class="form-control" id="curriculum_year" name="curriculum_year" placeholder="Curriculum Name:" required>
                       <label for="subj_name">Curriculum Name:</label>
                   </div>
-                  <div class="form-floating mb-3">
-                    {{ form.year_level }}
-                    <label for="{{ form.year_level.id_for_label }}"> Year Level</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    {{ form.semester }}
-                    <label for="{{ form.semester.id_for_label }}"> Semester</label>
-                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Subject</button>
+                  <button type="submit" class="btn btn-primary">Create</button>
                 </div>
               </form>
             </div>

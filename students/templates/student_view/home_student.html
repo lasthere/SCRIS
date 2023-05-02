@@ -1,40 +1,34 @@
 {% extends "student_view/base.html" %}
 
 {% block body %}
-<div class="card bg-light">
-	<div class="card-header text-light ba">
-		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
-	</div>
+<div class="card shadow text-dark">
+    <div class="card-header bg-info ">
+         <h3><i class="fas fa-laugh-wink"></i>Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
+    </div>
     <div class="card-body">
      Make sure your email is the one your currently using!
      </div>
  </div>
 {% if subject_count != 0 %}
-	<div class="card bg-light mt-1">
-		<div class="card-header text-light {% if failed_count > 0 %}red{% else %}ba{% endif %}">
-			<button type="button" class="btn-close float-right" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-x"></i></button>
-				<h3><i class="fa-solid {% if failed_count > 0 %} fa-user-xmark {% else %} fa-user-check {% endif %}"></i> Notice</h3>
-				
-		</div>
-		<div class="card-body">
-		    {{ message }}
-		 </div>
-	 </div>
+    <div class="card shadow text-dark mt-1">
+        <div class="card-header text-dark{% if failed_count > 0 %} bg-danger {% else %}bg-info {% endif %}">
+                <h3><i class=" {% if failed_count > 0 %}fas fa-frown {% else %}fas fa-laugh {% endif %}"></i> Notice</h3>
+        </div>
+        <div class="card-body">
+            {{ message }}
+         </div>
+     </div>
 {% endif %}
 
-<footer class="page-footer font-smallm-1">
-	<div class="footer-copyright text-center py-3">Copyright &copy; <script>document.write(new Date().getFullYear())</script>
-        <span> Delta 5 Project</span>
-    </div>
-</footer> 
+
 
 <script>
 
- 	var closeButton = document.querySelector('.card-header .btn-close');
- 	closeButton.addEventListener('click', function() {
- 		var cardHeader = this.parentNode;
- 		var card = cardHeader.parentNode;
- 		card.parentNode.removeChild(card);
- 	});
+    var closeButton = document.querySelector('.card-header .btn-close');
+    closeButton.addEventListener('click', function() {
+        var cardHeader = this.parentNode;
+        var card = cardHeader.parentNode;
+        card.parentNode.removeChild(card);
+    });
  </script>
 {% endblock %}

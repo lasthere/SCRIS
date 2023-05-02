@@ -1,61 +1,313 @@
 {% extends "PA_Views/base.html" %}
-
+{% load myapp_tags %}
 {% block body %}
-{% load crispy_forms_tags %}
- <script>
-    $('.alert').alert()
-</script>
-  {% if success %}
-  <h3 class="text-center m-1"> Add Student Grade</h3>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      The <strong>Grade</strong>  added successfully.
-      <a href="{% url 'add_grade' %}" class="alert-link">Grade More.</a>
-    </div>
-  {% else %}
-    <div class="card bg-light m-1">
-      <h3 class="text-center text-dark">Add Student Grade</h3>
-        <div class="card-header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item me-auto">
-               <i class="fa-solid fa-address-card fa-lg"></i> Add Student Grade
-            </li>
-          </ul>
-        </div>
-          
-          <div class="card-body">
-            <form class="form-block" action="{% url 'add_grade' %}" method="POST">
-              {% csrf_token %}
-              <div class="row justify-content-between text-left">
-                <div class="form-group col-sm-3 flex-column d-flex"> <label class="form-control-label px-3">Subject<span class="text-danger"> *</span></label> {{form.subject_id}} </div>
-                <div class="form-group col-sm-3 flex-column d-flex"> <label class="form-control-label px-3">Student<span class="text-danger"> *</span></label> {{form.student_id}} </div>
-                <div class="form-group col-sm-3 flex-column d-flex"> <label class="form-control-label px-3">Grade<span class="text-danger"> *</span></label> {{form.subject_grade}} </div>
-                <div class="form-group col-sm-3 flex-column d-flex"> <label class="form-control-label px-3">Status<span class="text-danger"> </span></label> {{form.status}} </div>
-              </div>
-
-              <div class="col text-center d-grid gap-2">
-                <button type="submit" class="btn btn-hal ">Add</button>
-                <a href="{% url 'add_grade' %}" class="btn btn-outline-secondary ">Cancel</a>
-              </div>
-              </form>
-          </div>
-            
-          </div>
-        </div>
-      </div>
-      </div>
-       <footer class="page-footer font-small blue">
-                      <div class="footer-copyright text-center py-3">Copyright &copy; <script>document.write(new Date().getFullYear())</script>
-                        <span> Delta 5 Project</span>
-                      </div>
-                    </footer> 
+<style >
+    
+.red {
+      background-color: #FA8072;
+}
+.blue {
+      background-color: #87CEFA;
+}
+.orange {
+      background-color: peachpuff;
+}
+</style>
 
 
+<div class="col-12" style="border-radius: 15px; ">
+  <div class="row">
+    <div class="card bg-light" >
+      <table  class="table">
+                <tr bgcolor="#3EEB8F">
+                  
+                  <td colspan="4" height="25"><div align="center"><font color=black><strong>-
+                      STUDENT CURRICULUM RESIDENCY INFORMATION-</strong></font></div></td>
+                </tr>
+
+
+                <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student ID: <strong>{{ student.user.username }} </strong></td>
+                  <td width="49%" valign="middle">Year: <strong>{{ student.year_level }}</strong></td>
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td width="49%" valign="middle">Student name: <strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></td>
+                  <td width="49%" valign="middle">Total units taken: <strong>{{ total_units }}</strong></td>
+                </tr>
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td height="25">Curriculum Year :<strong> {{curriculum.curriculum_year}} </strong></td>
+                  <td height="25">  Total units required for this course :<strong> {{ atotal_units }}</strong></td>
+                  
+                </tr>
+
+
+                 <tr>
+                  <td width="1%" height="25">&nbsp;</td>
+                  <td colspan="7" valign="middle">  Course/Major: <strong>Bachelor of Science in Information Technology</strong><strong>{{course_id}}</strong></td>
+                  
+                </tr>
+
+                <tbody>
+                        <tr >
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                  {% for yearlevel in yearlevels %}
+                      {% if yearlevel.year_level == 1 %}
+                        <tr >
+                          <td ></td>
+                          <td ></td>
+                          <td colspan="8"><strong>First Year</strong> </td>
+                          <td ></td>
+                          <td ></td>
+                        </tr>
+
+                      {% elif yearlevel.year_level == 2 %}
+                        <tr>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                          <td colspan="8"><strong>Second Year</strong></td>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                      {% elif yearlevel.year_level == 3 %}
+                        <tr>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                          <td colspan="8"><strong>Third Year</strong></td>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                      {% elif yearlevel.year_level == 4 %}
+                        <tr>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                          <td colspan="8"><strong>Fourth Year</strong></td>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                      {% else %}
+                        <tr>
+                          <td height="25">&nbsp;</td>
+                          <td colspan="8"><strong>{{ yearlevel.year_level }}th Year</strong></td>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                      {% endif %}
+                        <tr>
+                          <td height="25">&nbsp;</td>
+                        </tr>
+                          <tr>
+                            <th rowspan="2">Subject Code</th>
+                            <th rowspan="2">Subject Description</th>
+                            <th colspan="2">Hours</th>
+                            <th colspan="2">Units</th>
+                            <th rowspan="2"></th>
+                          </tr>
+                          <tr>
+                            <th>Lec</th>
+                            <th>Lab</th>
+                            <th>Lec</th>
+                            <th>Lab</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                          </tr>
+                    {% for semester in yearlevel.semesters.all %}
+                      {% if semester.semester == 1 %}
+                      <tr>
+                        <td></td>
+                      </tr>
+                        <tr>
+                          <td colspan="7"><strong><u>First Semester</u></strong></td>
+                        </tr>
+                      {% elif semester.semester == 2 %}
+                      <tr>
+                        <td></td>
+                      </tr>
+                        <tr>
+                          <td colspan="7"><strong><u>Second Semester</u></strong></td>
+                          <td><strong>{{ semester.total_units }}</strong></td>
+                        </tr>
+                      {% elif semester.semester == 3 %}
+                      <tr>
+                        <td></td>
+                      </tr>
+                        <tr>
+                          <td colspan="7"><strong><u>Third Semester</u></strong></td>
+                          <td><strong>{{ semester.total_units }}</strong></td>
+                        </tr>
+                      {% else %}
+                      <tr>
+                        <td></td>
+                      </tr>
+                        <tr>
+                          <td colspan="7"><strong><u>{{ semester.semester }} Semester</u></strong></td>
+                          <td><strong>{{ semester.total_units }}</strong></td>
+                        </tr>
+                      {% endif %}
+
+                      {% for subject in semester.subjects.all %}
+                          <tr>
+                              <td>{{ subject.subj_code }}</td>
+                              <td>{{ subject.subj_name }}</td>
+                              <td>{{ subject.subj_hr_lec }}</td>
+                              <td>{{ subject.subj_hr_lab }}</td>
+                              <td>{{ subject.subj_units_lec }}</td>
+                              <td>{{ subject.subj_units_lab }}</td>
+                              <td>
+                                  <form class="form-block" action="{% url 'grade_student' student.user.id %}" method="POST">
+                                      {% csrf_token %}
+                                      <td><input type="number" class="form-control subject-grade" name="subject_grade"  id="grade-{{ subject.id }}" min="1.0" max="5.0" step="0.1" placeholder="Grade" required>
+                                      <td>
+                                          <select class="form-select status" name="status" id="status-{{ subject.id }}" required>
+                                              <option value="" disabled selected>Select Status</option>
+                                              <option value="passed">Passed</option>
+                                              <option value="failed">Failed</option>
+                                              <option value="incomplete">Incomplete</option>
+                                              <option value="dropped">Dropped</option>
+                                              <option value="noattendance">No Attendance</option>
+                                          </select>
+                                      </td>
+                                      <td><input type="text" value="{{ subject.id }}" hidden></td>
+                                      <td>
+                                          <button type="submit" class="btn btn-primary">Save</button>
+                                      </td>
+                                  </form>
+                              </td>
+                          </tr>
+                      {% endfor %}
+
+                      <tr>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td></td> 
+                        <td></td> 
+                        <td colspan="6"><strong>Total Academic Unit(s): </strong><strong>{% calculate_total_units_semester semester %}</strong></td>
+                            
+                      </tr>
+                      <tr>
+                          <td height="25">&nbsp;</td>
+                          <td height="25">&nbsp;</td>
+
+                      </tr>
+                      
+
+                    {% endfor %}
+                  {% endfor %}
+                  <tr>
+                    <td height="25">&nbsp;</td>
+                    <td height="25">&nbsp;</td>
+                    <td height="25">&nbsp;</td>
+                    <td height="25">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="5"><strong></strong></td>
+                    <td><strong>Total Academic Units: {{ atotal_units }}</strong></td>
+                  </tr>
+                  
+                </tbody>
+                <footer>
+                  <div class="text-center">
+                    <span>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Delta 5 Project</span>
+                  </div>
+                </footer>
+      </table>
+
+                
+
+  </div>
+</div>
     
 
-    </div>
-    </div>
-</div>
-  {% endif %}
+<!-- JS for Button Pssed -->
 
- 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Get all the form elements
+const forms = document.querySelectorAll('.form-block');
+
+// Add event listener to each form
+forms.forEach(form => {
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    // Get the form and input elements
+    const gradeInput = form.querySelector('.subject-grade');
+    const statusSelect = form.querySelector('.status');
+
+    // Get the input value
+    const grade = gradeInput.value;
+
+    // Determine status based on grade value
+    let status;
+    if (grade >= 1 && grade < 3) {
+      status = 'passed';
+    } else if (grade >= 3 && grade <= 5) {
+      status = 'failed';
+    } else {
+      status = '';
+    }
+
+    // Set the selected status option
+    statusSelect.value = status;
+
+    // Send the updated status to the server using AJAX
+    const data = {
+      subject_grade: grade,
+      status: status,
+      subject_id: form.querySelector('input[type="text"]').value,
+      csrfmiddlewaretoken: form.querySelector('input[name="csrfmiddlewaretoken"]').value
+    };
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': data.csrfmiddlewaretoken
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      console.log('Grade and status updated successfully');
+    })
+    .catch(error => {
+      console.error('Error updating grade and status:', error);
+    });
+  });
+});
+const gradeFields = document.querySelectorAll('.subject-grade');
+
+// Loop through each grade input field
+gradeFields.forEach((field) => {
+  // Get the corresponding dropdown menu for this grade field
+  const statusField = document.querySelector(`#status-${field.id.split('-')[1]}`);
+
+  // Listen for changes to the grade input field
+  field.addEventListener('change', (event) => {
+    // Get the new grade value
+    const newGrade = parseFloat(event.target.value);
+
+    // Set the status field based on the new grade value
+    if (newGrade >= 1 && newGrade <= 3) {
+      statusField.value = 'passed';
+    } else if (newGrade > 3 && newGrade <= 5) {
+      statusField.value = 'failed';
+    } else {
+      statusField.value = '';
+    }
+  });
+});
+
+</script>
+
+
 {% endblock %}

@@ -34,7 +34,7 @@
         display: none;
        }
       .scroll, .scroll1{
-        height: 500px;
+        height: 640px;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
       }
@@ -77,17 +77,11 @@
       .no-bullet-list {
       list-style-type: none;
   }
-
     </style>
-
   </head>
-<div class="page-content-wrapper">
-    <div class="banner" style="height:!important 50px">
-      <img src="{% static 'images/sample2.jpg' %}"style=" width:100%;height:15%;" >
-    </div>
+
 
 <div class="d-flex" id="wrapper">
-            <!-- Sidebar-->
             <div class=""  id="sidebar-wrapper">
                 <div class="bg-dark sidebar-heading" style="color: whitesmoke;" ><strong>Program Adviser</strong></div>
 
@@ -96,16 +90,13 @@
                     <a href="{{  home_pa }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == home_pa %} active {% endif %}"><i class="fas fa-home"></i> Home</a>
 
                     {% url 'index' as index %}
-                    <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}"><i class="fas fa-user-graduate"></i> Student List</a>
+                    <a href="{{  index }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == index %} active {% endif %}"><i class="fas fa-user-graduate"></i> Student</a>
 
                     {% url 'curriculum_list' as curriculum_list %}
-                    <a href="{{  curriculum_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == curriculum_list %} active {% endif %}"><i class="fa-solid fa-chalkboard-user"></i> Curriculum List</a>
+                    <a href="{{  curriculum_list }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == curriculum_list %} active {% endif %}"><i class="fa-solid fa-chalkboard-user"></i> Curriculum </a>
 
                     {% url 'contact_form' as contact_form %}
                     <a href="{{  contact_form }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == contact_form %} active {% endif %}"><i class="fa-solid fa-envelope"></i> Send Mail</a>
-
-                    {% url 'add_grade' as add_grade %}
-                    <a href="{{  add_grade }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == add_grade %} active {% endif %}"><i class="fa-solid fa-address-card fa-lg"></i> Add Grades</a>
 
                     {% url 'pa_profile' as pa_profile %}
                     <a href="{{  pa_profile }}" class="list-group-item list-group-item-action list-group-item-success p-3 {% if request.path == pa_profile %} active {% endif %}"><i class="fas fa-user"></i> Profile</a>
@@ -134,6 +125,8 @@
 
             </div>
 </div>
+</div>
+
 
  
     <script src="{% static 'dist/popper.js' %}"></script>

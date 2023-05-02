@@ -67,7 +67,7 @@
               </thead>
               <tbody>
                 {% for student in students %}
-                  <tr class="{% if student.ojtstatus == '✓' %}green{% elif grade.status == 'X' %}pink{% else %}pink{% endif %}">
+                  <tr class="clickable-row {% if student.ojtstatus == '✓' %}green{% elif grade.status == 'X' %}pink{% else %}pink{% endif %}">
                     <td>{{ student.number }}</td>
                     <td>{{ student.name }} {{ student.middle_initial }}</td>
                     <td>{{ student.year }}</td>
@@ -95,8 +95,6 @@
     {% endif %}
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}
 
-{% block custom_js %}
-
-{% endblock custom_js %}

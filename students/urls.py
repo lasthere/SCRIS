@@ -12,15 +12,35 @@ urlpatterns = [
   
   path('home_pa/', views.home_pa, name='home_pa'),
   path('pa_profile/',views.pa_profile, name='pa_profile'),
-  path('curriculum/<int:curriculum_id>/add_subject/', views.add_subject_to_curriculum, name='add_subject_to_curriculum'),
-
+  path('curriculum/<int:curriculum_id>/subject/', views.curriculum_year_semester_subject_add, name='curriculum_year_semester_subject_add'),
 
   path('curriculum/', views.curriculum_list, name='curriculum_list'),
   path('delete_curriculum/<int:id>/', views.delete_curriculum, name='delete_curriculum'),
   path('new_curriculum/',views.new_curriculum, name='new_curriculum'),
   path('curriculum_detail/<int:curriculum_id>',views.curriculum_detail,name='curriculum_detail'),
-  path('curriculum/<int:curriculum_id>/delete_subject/<int:subject_id>/', views.delete_subject_curriculum, name='delete_subject_curriculum'),
-  path('curriculum/<int:curriculum_id>/edit_subject/<int:subject_id>/', views.edit_subject_curriculum, name='edit_subject_curriculum'),
+  path('curriculum/<int:curriculum_id>/subject/<int:subject_id>/delete/',views.delete_subject_from_curriculum, name='delete_subject_from_curriculum'),
+  path('curriculum/<int:curriculum_id>/subject/<int:subject_id>/edit/', views.edit_subject_from_curriculum, name='edit_subject_from_curriculum'),
+
+
+  
+
+
+
+  path('curriculum/<int:curriculum_id>/create_year_level/', views.create_year_level, name='create_year_level'),
+  path('curriculum/<int:curriculum_id>/delete_year_level/', views.delete_year_level, name='delete_year_level'),
+
+  path('curriculum/<int:curriculum_id>/year-levels/', views.get_year_levels, name='get_year_levels'),
+
+
+  path('enroll_students/<int:curriculum_id>/', views.enroll_students, name='enroll_students'),
+
+  path('semesters/', views.get_semesters, name='get_semesters'),
+
+  path('add_semester/', views.add_semester, name='add_semester'),
+
+  path('delete_latest_semester/', views.delete_latest_semester, name='delete_latest_semester'),
+
+
 
 
   path('student/', views.index, name='index'),
@@ -29,7 +49,10 @@ urlpatterns = [
   path('edit_student/<int:id>', views.edit_student, name="edit_student"),
   #path('edit_student_save/', views.edit_student_save, name="edit_student_save"),
   #path('edit_student/', views.edit, name='edit'),
-  path('delete/<int:id>/', views.delete, name='delete'),
+  #path('delete/<int:curriculum_id>/', views.delete, name='delete'),
+  path('student/delete/<int:id>/', views.student_delete, name='student_delete'),
+
+
 
   path('add_ojt/', views.add_ojt,name='add_ojt'),
   path('ojt_list/', views.ojt_list, name='ojt_list'), 
@@ -56,9 +79,10 @@ urlpatterns = [
   path('edit_subject/<int:id>/', views.edit_subject, name='edit_subject'),
   path('delete_subject/<int:id>/', views.delete_subject, name='delete_subject'),
 
-  path('add_grade',views.add_grade, name='add_grade'),
 
   path('student/<int:user_id>/', views.student_grades, name='student_grades'),
+
+  path('grade_student/<int:user_id>/', views.grade_student, name='grade_student'),
 
 
   #ojt

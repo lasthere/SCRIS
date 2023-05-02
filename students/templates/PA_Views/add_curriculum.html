@@ -36,16 +36,7 @@
               <div class="form-floating mb-3">
                 {{form.curriculum_year}}
                 <label for="{{form.curriculum_year.id_for_label}}">Curriculum Name:</label>
-              </div>
-              <div class="form-floating mb-3">
-                    {{ form.year_level }}
-                    <label for="{{ form.year_level.id_for_label }}"> Year Level</label>
-                  </div>
-              <div class="form-floating mb-3">
-                    {{ form.semester }}
-                    <label for="{{ form.semester.id_for_label }}"> Semester</label>
-              </div>
-              
+              </div>          
             <div class="col text-center d-grid gap-2">
               <button type="submit" class="btn btn-success">Add</button>
               <a href="{% url 'curriculum_list' %}" class="btn btn-secondary">Cancel</a>

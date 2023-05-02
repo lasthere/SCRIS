@@ -70,12 +70,18 @@
                     <td>{{ student.year_level }}</td>
                     <td class=exclude-cell>
 
-                      <a class="exclude-cell btn btn-warning me-1" href="{% url 'edit_student' student.user.id %}">
-                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      <a class="exclude-cell btn btn-primary me-1" href="{% url 'grade_student' user_id=student.user.id %}">
+                        Add Grade
                       </a>
 
+                      <a class="exclude-cell btn btn-warning me-1" href="{% url 'edit_student' student.user.id %}">
+                        Edit
+                      </a>
+
+
+
                       <button type="button" class="exclude-cell btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{student.user.id}}">
-                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                        Delete
                       </button>
 
 
@@ -125,7 +131,7 @@
                               <p>Are you sure you want to delete this student?</p>
                             </div>
                             <div class="modal-footer">
-                              <form action="{% url 'delete' student.user.id %}" method="POST">
+                              <form action="{% url 'student_delete' student.user.id %}" method="POST">
                                 {% csrf_token %}
                                 <input type="submit" class="btn btn-primary" value="Delete">
                               </form>

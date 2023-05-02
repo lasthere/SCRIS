@@ -14,33 +14,28 @@ class Subject(models.Model):
     subj_units_lec = models.FloatField(max_length=10, default=0.0)
     subj_units_lab = models.FloatField(max_length=10, default=0.0)
     added_to_curriculum = models.BooleanField(default=False)
-    prerequisites = models.ManyToManyField('Prerequisite', related_name='related_subjects')
-
-    def __str__(self):
-        return f'{self.subj_code},  {self.subj_name}'
-
-class Prerequisite(models.Model):
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='prerequisite_set')
-    prerequisite = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'{self.prerequisite}'
-
+    prerequisites = models.ManyToManyField('self', symmetrical=False, blank=True)
 
 class Curriculum(models.Model):
   id = models.AutoField(primary_key=True)
   curriculum_year = models.CharField(max_length=200, verbose_name="Curriculum Year")
-  semester = models.CharField(max_length=250)
-  YEAR_LEVEL_CHOICES = [
-        ('1', 'First Year'),
-        ('2', 'Second Year'),
-        ('3', 'Third Year'),
-        ('4', 'Fourth Year'),
-    ]
-    
-  year_level = models.CharField(max_length=1, choices=YEAR_LEVEL_CHOICES)
   subjects=models.ManyToManyField(Subject)
+  def __str__(self):
+    return self.curriculum_year
 
+class YearLevel(models.Model):
+  year_level = models.IntegerField()
+  curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, related_name='year_levels')
+  subjects = models.ManyToManyField(Subject, related_name='year_levels')
+
+
+class Semester(models.Model):
+  semester = models.IntegerField()
+  year_level = models.ForeignKey(YearLevel, on_delete=models.CASCADE, related_name='semesters')
+  subjects = models.ManyToManyField(Subject, related_name='semesters')
+
+  def __str__(self):
+    return f"{self.year_level} - {self.get_semester_display()}"
 
 class CustomUser(AbstractUser):
   user_type_data = ((1, "Hod"), (2, "PA"), (3, "Students"),(4, "Ojt_Officer"))
@@ -53,7 +48,7 @@ class Student(models.Model):
   student_number = models.CharField(max_length=50, null=True,blank=True)
   middle_initial = models.CharField(max_length=2, null=True, blank=True)
   year_level = models.CharField(max_length=50)
-  subject = models.ManyToManyField(Subject, through="SubjectGrade")
+  curriculums = models.ManyToManyField(Curriculum, blank=True, related_name='students')
   objects = models.Manager()
 
   def __str__(self):
@@ -78,47 +73,40 @@ class Ojt_Officer(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
   objects = models.Manager()
 
-
-
-#ang sa tables na nin dapita
-
-
-#grading system
-
 class SubjectGrade(models.Model):
-  id = models.AutoField(primary_key=True)
-  subject_id =models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name="Subject")
-  student_id = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name="Students")
-  subject_grade = models.FloatField(null=True, blank=True, default=1.0)
-  status = models.CharField(max_length=12,blank=True,null=False,choices=[("passed", "Passed"), ("failed", "Failed"), ("incomplete", "Incomplete"), ("dropped", "Dropped"), ("noattendance", "No Attendance")])
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-  objects = models.Manager()
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    curriculum =models.ForeignKey(Curriculum,on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades')
+    subject_grade = models.FloatField(blank=True, null=True,  default=1.0)
+    STATUS_CHOICES = [
+        ("passed", "Passed"),
+        ("failed", "Failed"),
+        ("incomplete", "Incomplete"),
+        ("dropped", "Dropped"),
+        ("noattendance", "No Attendance"),
+        ("nograde", "No Grade")
+    ]
+    status = models.CharField(blank=True, null=False,max_length=12, choices=STATUS_CHOICES)
+    objects = models.Manager()
 
-  def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
+      if self.status == 'nograde' or self.status == 'dropped' or self.status == 'noattendance':
+          self.subject_grade = 0.0
+      elif self.status == 'incomplete':
+          self.subject_grade = 4.0
+      elif self.status == 'failed':
+          self.subject_grade = 5.0
+      elif self.subject_grade and float(self.subject_grade) >= 1.0 and float(self.subject_grade) <= 3.0:
+          self.status = 'passed'
+      elif self.subject_grade and float(self.subject_grade) >= 3.1 and float(self.subject_grade) <= 5.0:
+          self.status = 'failed'   
+      super().save(*args, **kwargs)
 
-    if (self.status == "incomplete") or (self.status == "dropped") or (self.status == "noattendance"):
-       self.subject_grade = None
-    else:
-      if(self.status is None) or ((self.subject_grade >= 1.0) and (self.subject_grade <= 3.0 )):
-        self.status ="passed"
-      else:
-        self.status="failed"
-
-    super().save(*args, **kwargs)
-
-  def __str__(self):
-    return f'Student Suject Grades:{self.student_id}, {self.subject_grade}, {self.status}'
-
-class CurriculumSubject(models.Model):
+class StudentEnrollment(models.Model):
+  student = models.ForeignKey(Student, on_delete=models.CASCADE)
   curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
-  subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-  class Meta:
-    unique_together = ('curriculum', 'subject')
-
-  def __str__(self):
-    return f'{self.curriculum} - {self.subject}'
 
 
 @receiver(post_save, sender=CustomUser)

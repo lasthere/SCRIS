@@ -2,7 +2,10 @@ from django import forms
 from django.forms import Form
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade, Curriculum, Prerequisite
+from .models import Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, CustomUser, SubjectGrade, Curriculum
+from django.forms import formset_factory
+
+
 
 
 
@@ -172,31 +175,6 @@ class HodForm(forms.ModelForm):
     first_name = forms.CharField(label="first_name", widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name = forms.CharField(label="last_name", widget=forms.TextInput(attrs={"class":"form-control"}))
 
-class PrerequisiteForm(forms.ModelForm):
-    prerequisites = forms.ModelMultipleChoiceField(
-        queryset=Subject.objects.all(),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
-        label="Prerequisites",
-    )
-    prerequisite = forms.CharField(max_length=50, label="Additional Prerequisite", required=False)
-
-    class Meta:
-        model = Prerequisite
-        fields = ('prerequisite', )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance.pk:
-            self.fields['prerequisites'].initial = self.instance.subject_set.all()
-
-    def save(self, commit=True):
-        prerequisite = super().save(commit=False)
-        if commit:
-            prerequisite.save()
-        if self.cleaned_data['prerequisites']:
-            prerequisite.subject_set.set(self.cleaned_data['prerequisites'])
-        return prerequisite
-
 class SubForm(forms.ModelForm):
   
   class Meta:
@@ -222,57 +200,43 @@ class SubForm(forms.ModelForm):
       
     }
 
-class GradeForm(forms.ModelForm):
+class s(forms.ModelForm):
+    subject_grade = forms.FloatField(
+    min_value=1.0,
+    max_value=5.0,
+    label="Grade:",
+    widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Grade:'})
+)
 
-  subject_grade = forms.FloatField(min_value=1.0, max_value=5.0)
- 
-  class Meta:
-    model = SubjectGrade
-    fields = ['subject_id', 'student_id', 'subject_grade','status']
+    class Meta:
+        model = SubjectGrade
+        fields = ['subject_grade', 'status']
 
-    def clean_score(self):
-      grade = self.cleaned_data['subject_grade']
-      if grade < 0.0 or grade >= 5.0:
-        raise forms.ValidationError('Score must be between 0 and 5.')
-      return grade
+    def clean_subject_grade(self):
+        subject_grade = self.cleaned_data['subject_grade']
+        if subject_grade < 0.0 or subject_grade >= 5.0:
+            raise forms.ValidationError('Grade must be between 0 and 5.')
+        return subject_grade
 
     def clean_status(self):
-      status = self.cleaned_data['status']
-      score = self.cleaned_data['subject_grade']
-      if (status is None) and (score <= 3.0) :
-        status = 'Pass'
-      else:
-        status = 'Fail'
-      return status
-    clean_score
-    clean_status
+        status = self.cleaned_data['status']
+        grade = self.cleaned_data['subject_grade']
+        if grade < 1.0:
+            raise forms.ValidationError('Grade must be at least 1.0.')
+        elif grade >= 3.0:
+            status = "passed"
+        else:
+            status = "failed"
+        return status
+
 
 class CurriculumForm(forms.ModelForm):
   curriculum_year= forms.CharField(label="Curriculum Name: ",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Curriculum Name:'}))
-  semester = forms.ChoiceField(
-        label='Semester:',
-        widget=forms.Select(
-            attrs={
-                'class': 'form-select',
-                'id': 'year_level'
-            }
-        ),
-        choices=[('1', 'First Semester'), ('2', 'Second Semester'),]
-    )
-  year_level = forms.ChoiceField(
-        label='Year Level:',
-        widget=forms.Select(
-            attrs={
-                'class': 'form-select',
-                'id': 'year_level'
-            }
-        ),
-        choices=[('1', 'First Year'), ('2', 'Second Year'), ('3', 'Third Year'), ('4', 'Fourth Year')]
-    )
 
   class Meta:
     model=Curriculum
-    fields=['curriculum_year', 'semester', 'year_level']
+    fields=['curriculum_year']
+
 
 
 
@@ -293,4 +257,31 @@ class AddSubjectForm(forms.Form):
       id__in=[s.id for s in added_subjects]
         )
 
+
+class EnrollStudentForm(forms.Form):
+    student = forms.ModelChoiceField(queryset=Student.objects.all(), label='Select a student to enroll')
+    curriculum = forms.ModelChoiceField(queryset=Curriculum.objects.all(), label='Select a curriculum to enroll the student in')
+
+class GradeForm(forms.Form):
+
+    subject_id = forms.IntegerField(widget=forms.HiddenInput())
+    subject_grade = forms.FloatField(
+        min_value=1.0,
+        max_value=5.0,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'min': '1.0',
+            'max': '5.0'
+        })
+    )
+    status = forms.ChoiceField(
+        choices=[
+        ('passed', 'Passed'), 
+        ('failed', 'Failed'), 
+        ('incomplete', 'Incomplete'), 
+        ('dropped', 'Dropped'), 
+        ('noattendance', 'No Attendance'),
+        ("nograde", "No Grade")], 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
 
