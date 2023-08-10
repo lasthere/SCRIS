@@ -1,38 +1,97 @@
 {% extends "PA_Views/base.html" %}}
-
+{% load myapp_tags %}
 {% block body %}
-  <h1>Enroll a Student in a Curriculum</h1>
-  {% if curriculums %}
-    <div class="row">
-      <div class="col-md-6">
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group">
-            {{ form.as_p }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<div class="card bg-light">
+    <div class="card-header">
+        <h4 class="card-title">Enrolled Students - {{ curriculum.curriculum_year }}</h4>
+        <button type="button" class="btn btn-primary" style="float: right;" data-toggle="modal" data-target="#addSubjectModal2">
+            <i class="fa-solid fa-plus"></i> Enroll Student
+          </button>
+          <div class="messages">
+        {% if messages %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <button type="submit" class="btn btn-primary">Enroll</button>
-        </form>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {% if enrolled_students %}
+        <div class="table-responsive">
+            <table id="table" class="table table-hover table-bordered" data-page-length="10">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Student ID</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Student ID</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for student in enrolled_students %}
+                        <tr>
+                            <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                            <td>{{ student.user.username }}</td>
+                        </tr>
+                    {% endfor %}
+        {% else %}
+                        <tr>
+                            No Data Found
+                        </tr>
+        {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+
+<div class="modal fade" id="addSubjectModal2" tabindex="-1" role="dialog" aria-labelledby="addSubjectModalLabel2" aria-hidden="true">
+  <div class=" modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="addSubjectModalLabel2">Enroll Students in {{ curriculum.curriculum_year }}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <form method="POST" action="{% url 'enroll_students' curriculum.id %}">
+            {% csrf_token %}
+              <h5>Select Students to Enroll:</h5>
+                <select class="form-select" name="students" size="5" multiple aria-label="size 5 select example">
+                  {% for c in not_enrolled_student %}
+                  <option value="{{ c.user.id }} "> ➣ {{ c.user.first_name }} {{ c.user.last_name }} ({{ c.user.username }})</option>
+                  {% endfor %}
+                </select>
+             <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
       </div>
     </div>
-    <hr>
-    <h2>Enrolled Students</h2>
-    <div class="row">
-      {% for enrollment in enrollments %}
-        <div class="col-md-4">
-          <h3>{{ enrollment.curriculum.curriculum_year }}</h3>
-          {% if enrollment.student_set.all %}
-            <ul>
-              {% for student in enrollment.student_set.all %}
-                <li>{{ student.user.first_name }} {{ student.user.last_name }}</li>
-              {% endfor %}
-            </ul>
-          {% else %}
-            <p>No enrolled students.</p>
-          {% endif %}
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p>There are no curriculums available to enroll students in.</p>
-  {% endif %}
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#table').DataTable();
+});
+</script>
+
 {% endblock %}

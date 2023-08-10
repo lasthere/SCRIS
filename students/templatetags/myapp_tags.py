@@ -1,7 +1,7 @@
 # myapp/templatetags/myapp_tags.py
 from django import template
 from django.shortcuts import get_object_or_404
-from students.models import SubjectGrade
+from students.models import SubjectGrade, StudentEnrollment, Curriculum
 
 
 register = template.Library()
@@ -47,6 +47,13 @@ def has_grade_any(student, subjects):
             return True
     return False
 
+@register.filter(name='get_student_curriculum')
+def get_student_curriculum(student):
+    enrollment = StudentEnrollment.objects.filter(student=student).first()
+    if enrollment:
+        return enrollment.curriculum.curriculum_year
+    else:
+        return None
 
 @register.simple_tag
 def get_subject_status(subject, status):
@@ -76,3 +83,21 @@ def get_all_prerequisites(subject, student):
                 html += get_all_prerequisites(related_subject, student)
     return html
 
+@register.simple_tag
+def enrolled_students(curriculum):
+    students = curriculum.studentenrollment_set.all()
+    return students if students else None
+
+@register.simple_tag
+def count_enrolled_students(curriculum_id):
+    curriculum = Curriculum.objects.get(id=curriculum_id)
+    count = StudentEnrollment.objects.filter(curriculum=curriculum).count()
+    return count
+
+@register.filter
+def is_enrolled(curriculum_id):
+    """
+    Returns True if the specified curriculum has at least one enrollment.
+    """
+    enrollments = StudentEnrollment.objects.filter(curriculum_id=curriculum_id)
+    return enrollments.exists()

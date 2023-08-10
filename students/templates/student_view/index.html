@@ -40,7 +40,6 @@
                   <table>
                     <h5 class="table-success" style="padding:5px;">
                       <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-lg">Can Enroll</button>
-                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target=".not-modal">Cannot Enroll</button>
 
                     </h5>
                     <tbody>
@@ -100,6 +99,7 @@
                                 <th rowspan="2">Grade</th>
                                 <th rowspan="2">Status</th>
                                 <th rowspan="2">Prerequisite</th>
+                                <th rowspan="2">Enrollment Status</th>
                             </tr>
                             <tr>
                                 <th>Lec</th>
@@ -216,6 +216,17 @@
                                         N/A
                                     {% endif %}
                                   {% endfor %}                             
+                                </td>
+                                <td>
+                                  {% if subject in available_subjects %}
+                                    <div class="circle green">
+                                      <i class="fa fa-check" aria-hidden="true"></i>
+                                    </div>
+                                  {% else %}
+                                    <div class="circle">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </div>
+                                  {% endif %}
                                 </td>
                             </tr>
                           {% endfor %}
@@ -371,60 +382,6 @@
                           </div>
                         </div>
 
-                        <div class="modal fade not-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <h5 class="text-center"><strong>List of Subject Ineligible to Enroll</strong></h5>
-                              <table class="table">
-                                <thead class="text-dark table-danger">
-                                  <tr>
-                                    <th>Subject Code</th>
-                                    <th>Subject Name</th>
-                                    <th>Units</th>
-                                    <th>Reason</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% if no_subjects %}
-                                    {% for subject in no_subjects %}
-                                      <tr>
-                                        <td>{{ subject.subj_code }}</td>
-                                        <td>{{ subject.subj_name }}</td>
-                                        <td>{{ subject.subj_units_lec }}/{{ subject.subj_units_lab }}</td>
-                                        <td>
-                                          {% for prerequisite in subject.prerequisites.all %}
-                                            {{ prerequisite.subj_code}}
-                                            {% if student|has_grade:prerequisite %}
-                                                {% if student|get_subject_status:prerequisite == 'passed' %}
-                                                  (Passed)
-                                                {% elif student|get_subject_status:prerequisite == 'failed' %}
-                                                  (Failed)
-                                                {% elif student|get_subject_status:prerequisite == 'incomplete' %}
-                                                  (Inc)
-                                                {% elif student|get_subject_status:prerequisite == 'dropped' %}
-                                                  (Dropped)
-                                                {% elif student|get_subject_status:prerequisite == 'noattendance' %}
-                                                  (No Attendance)
-                                                {% endif %}
-                                                {% elif student|get_subject_status:prerequisite == '' %}
-                                                  N/A
-                                                {% endif %}
-                                            {% empty %}
-                                                {{ student|get_subject_status:subject }}
-                                          {% endfor %}        
-                                        </td>
-                                      </tr>
-                                    {% endfor %}
-                                  {% else %}
-                                    <tr>
-                                      <td>Eligible to take all Subjects</td>
-                                    </tr>
-                                  {% endif %}
-                                  </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
 
 
     </div>

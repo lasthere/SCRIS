@@ -1,4 +1,5 @@
 {% extends "PA_Views/base.html" %}
+{% load myapp_tags %}
 <style >
 	.r::-webkit-scrollbar{
 		display: none;
@@ -10,71 +11,14 @@
       }
 </style>
 {% block body %}
-<div class="card bg-light ms-1 me-1 mb-1">
-	<div class="card-header text-light hal">
+<div class="card  ms-1 me-1 mb-1">
+	<div class="card-header text-dark bg-success">
 		 <h3><i class="fa-solid fa-user-check"></i> Welcome {{ user.username }}!</h3>
 	</div>
     <div class="card-body">
      Working on it...
      </div>
  </div>
- <div class="row ms-1 me-1 mb-1">
- 	<div class="card bg-light me-1 mb-1" style="width: 18rem; opacity: 0.9;">
-		<div class="card-header text-light halan">
-			 <h4><i class="fa-solid fa-user-xmark"></i> To Do List!</h4>
-		</div>
-	    <div class="r card-body" style="overflow:auto; max-height: 300px;">
-	    	<p class="card-text ">
-			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Csv File Upload..</span></strong>
-			    <li>Student</li><li>Subject..</li><li>Grades</li>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Make prerequisite button more reactive.. </span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Counts for.. </span></strong>
-			    <li>Student</li><li>Subject..</li>
-			    <li>Number of failed or incomplete subject of student..</li>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Activity Log.. Page Html </span></strong>
-			    <li>-for email sending..and changes in data..</li>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> More filters tas links..</span></strong>
-			    <li>links para web connectivity</li>
-			    <li>filters kay mas dali ma kit.an ang gi pangita</li>
-			    <li>ascending.. decending..</li>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> mag Himu ug environ sa pythonanywhere para safe.. </span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Remove Accessibility without login..</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Create Carousel kay para astig..</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Ngutana ni sir unsay maayo..</span></strong>
-	    	</p>  
-	     </div>
-	 </div>
-	 <div class="card bg-light me-1 mb-1" style="width: 18rem; opacity: 0.9;">
-		<div class="card-header text-light hal">
-			 <h4><i class="fa-solid fa-user-check"></i> Done?</h4>
-		</div>
-	    <div class="r card-body" style="overflow:auto; max-height: 300px;" >
-	    	<p class="card-text ">
-			   	<strong><span><i class="fa-solid fa-circle-dot"></i> Login</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i>Nav Bar</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Email Message</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Notify Students</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Prerequisite..? pa check ta ani</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Check Student Legible for OJT</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> Add Grade? Di sure basin di ni mao</span></strong>
-			   	<strong><span><br><i class="fa-solid fa-circle-dot"></i> Filters for Easy Access..</span></strong>
-			    <strong><span><br><i class="fa-solid fa-circle-dot"></i> More Icons..</span></strong>
-	    	</p>  
-	     </div>
-	 </div>
-	 <div class="card bg-light me-1 mb-1" style="width: 18rem; opacity: 0.9;">
-		<div class="card-header text-light dan ">
-			 <h4><i class="fa-solid fa-triangle-exclamation"></i> Notice!</h4>
-		</div>
-	    <div class="card-body" >
-	    	<p class="card-text ">
-			   	<strong><span><i class="fa-solid fa-circle-dot"></i> click student list .. then click sa name makita ang scri</span></strong>
-			   	<br><strong><span><i class="fa-solid fa-circle-dot"></i> an sa subject kay edit</span></strong>
-	    	</p>  
-	     </div>
-	 </div>
- </div>
-
 
 
 {% endblock %}

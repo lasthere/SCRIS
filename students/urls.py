@@ -21,7 +21,7 @@ urlpatterns = [
   path('curriculum/<int:curriculum_id>/subject/<int:subject_id>/delete/',views.delete_subject_from_curriculum, name='delete_subject_from_curriculum'),
   path('curriculum/<int:curriculum_id>/subject/<int:subject_id>/edit/', views.edit_subject_from_curriculum, name='edit_subject_from_curriculum'),
 
-
+  path('curriculum/<int:curriculum_id>/',views.enroll_students, name='enroll_students'),
   
 
 
@@ -32,7 +32,7 @@ urlpatterns = [
   path('curriculum/<int:curriculum_id>/year-levels/', views.get_year_levels, name='get_year_levels'),
 
 
-  path('enroll_students/<int:curriculum_id>/', views.enroll_students, name='enroll_students'),
+  path('add_enroll_student/<int:curriculum_id>/', views.add_enroll_student, name='add_enroll_student'),
 
   path('semesters/', views.get_semesters, name='get_semesters'),
 

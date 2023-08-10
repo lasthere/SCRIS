@@ -25,7 +25,7 @@ import smtplib
 
 from students.templatetags.myapp_tags import calculate_total_units_semester,get_subject_status,has_grade,get_subject_grade
 from .models import CustomUser, Student, Ojt_Officer, Dept_Head, ProgramAdvisor, Subject, SubjectGrade, Curriculum, YearLevel, Semester, StudentEnrollment
-from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,EditProfile,StudentSearchForm,CurriculumForm,AddSubjectForm,EnrollStudentForm,GradeForm 
+from .forms import StudentForm, OjtForm, HodForm, PaForm, SubForm,EditStudentForm,EditStudentFormUser,EditOjtForm,EditProfile,StudentSearchForm,CurriculumForm,AddSubjectForm,EnrollStudentForm,GradeForm
 
 # Create your views here.
 # Login
@@ -129,7 +129,7 @@ def home_student(request):
 
 @login_required
 def student_profile(request):
-  
+
 
   if request.user.user_type == '3':
     student = Student.objects.get(user_id=request.user.id)
@@ -170,7 +170,7 @@ def legible_subjects_to_take (request):
     student = Student.objects.get(user_id=request.user.id)
     student_enrollment = get_object_or_404(StudentEnrollment, student=student)
     curriculum = student_enrollment.curriculum
-    yearlevels = curriculum.year_levels.all() 
+    yearlevels = curriculum.year_levels.all()
 
 @login_required
 def student_index(request):
@@ -199,36 +199,35 @@ def student_index(request):
 
     available_subjects = set()
     for subject in Subject.objects.filter(curriculum=curriculum):
-      if not subject.prerequisites.all():
-        if get_subject_grade(student, subject) == 0.0:
-          available_subjects.add(subject)
-        elif get_subject_status(student, subject) == 'failed':
-          available_subjects.add(subject)
-      else:
-        prerequisites_passed = True
-        for prerequisite in subject.prerequisites.all():
-          if get_subject_status(student, prerequisite) != 'passed':
-            prerequisites_passed = False
-            break
-          if prerequisites_passed:
-            available_subjects.add(subject)
+        if not subject.prerequisites.all():
+            if get_subject_grade(student, subject) == 0.0:
+                available_subjects.add(subject)
+            elif get_subject_status(student, subject) != 'passed':
+                available_subjects.add(subject)
+        else:
+            prerequisites_passed = True
+            for prerequisite in subject.prerequisites.all():
+                if get_subject_status(student, prerequisite) != 'passed':
+                    prerequisites_passed = False
+                    break
+            if prerequisites_passed and get_subject_status(student, subject) != 'passed':
+                available_subjects.add(subject)
 
 
     no_subjects = set()
     for bad_subjects in Subject.objects.filter(curriculum=curriculum):
       if not bad_subjects.prerequisites.all():
-        if get_subject_status (student, bad_subjects) != 'failed':
+        if get_subject_status (student, bad_subjects) != 'passed':
           if get_subject_grade(student, bad_subjects) != 0.0:
-            no_subjects.add(bad_subjects)
-          if get_subject_status(student, bad_subjects) == 'incomplete':
-            no_subjects.add(bad_subjects)
-          elif get_subject_status(student, bad_subjects) == 'passed':
             no_subjects.add(bad_subjects)
       else:
         for prerequisite in bad_subjects.prerequisites.all():
           if get_subject_status(student, prerequisite) != 'passed':
             no_subjects.add(bad_subjects)
             break
+        if prerequisites_passed and get_subject_status(student, subject) != 'passed':
+            available_subjects.add(subject)
+
 
     Inc_subjects = []
     for inc in Subject.objects.filter(curriculum=curriculum):
@@ -271,11 +270,13 @@ def home_ojt(request):
     return render(request, 'ojt_view/home_ojt.html')
   else:
     return render(request, 'login.html')
-  
+
 
 
 def student_grades(request, user_id):
     student = Student.objects.get(user_id=user_id)
+    pa_user = CustomUser.objects.get(pk=request.user.id)
+
 
     student_enrollment = get_object_or_404(StudentEnrollment, student=student)
     curriculum = student_enrollment.curriculum
@@ -292,36 +293,19 @@ def student_grades(request, user_id):
 
     available_subjects = set()
     for subject in Subject.objects.filter(curriculum=curriculum):
-      if not subject.prerequisites.all():
-        if get_subject_grade(student, subject) == 0.0:
-          available_subjects.add(subject)
-        elif get_subject_status(student, subject) == 'failed':
-          available_subjects.add(subject)
-      else:
-        prerequisites_passed = True
-        for prerequisite in subject.prerequisites.all():
-          if get_subject_status(student, prerequisite) != 'passed':
-            prerequisites_passed = False
-            break
-          if prerequisites_passed:
-            available_subjects.add(subject)
+        if not subject.prerequisites.all():
+            if get_subject_status(student, subject) != 'passed':
+                available_subjects.add(subject)
 
+        else:
+            prerequisites_passed = True
+            for prerequisite in subject.prerequisites.all():
+                if get_subject_status(student, prerequisite) != 'passed':
+                    prerequisites_passed = False
+                    break
+            if prerequisites_passed and get_subject_status(student, subject) != 'passed':
+                available_subjects.add(subject)
 
-    no_subjects = set()
-    for bad_subjects in Subject.objects.filter(curriculum=curriculum):
-      if not bad_subjects.prerequisites.all():
-        if get_subject_status (student, bad_subjects) != 'failed':
-          if get_subject_grade(student, bad_subjects) != 0.0:
-            no_subjects.add(bad_subjects)
-          if get_subject_status(student, bad_subjects) == 'incomplete':
-            no_subjects.add(bad_subjects)
-          elif get_subject_status(student, bad_subjects) == 'passed':
-            no_subjects.add(bad_subjects)
-      else:
-        for prerequisite in bad_subjects.prerequisites.all():
-          if get_subject_status(student, prerequisite) != 'passed':
-            no_subjects.add(bad_subjects)
-            break
 
     Inc_subjects = []
     for inc in Subject.objects.filter(curriculum=curriculum):
@@ -341,12 +325,12 @@ def student_grades(request, user_id):
         'total_units_passed': total_units_passed,
         'available_subjects': available_subjects,
         'Inc_subjects':Inc_subjects,
-        'no_subjects':no_subjects,
     })
 
 
 def index(request):
-  students = Student.objects.all().order_by('year_level','user__username','user__first_name','user__last_name','middle_initial') 
+  pa_user = CustomUser.objects.get(pk=request.user.id)
+  students = Student.objects.all().order_by('year_level','user__username','user__first_name','user__last_name','middle_initial')
 
   year_level = request.GET.get('year_level')
   if year_level:
@@ -408,7 +392,7 @@ def save_student(request):
         })
 
 
-    
+
 def edit_student(request, id):
   if request.method == 'POST':
     student_user = CustomUser.objects.get(pk=id)
@@ -440,6 +424,9 @@ def student_delete(request, id):
     student_user.delete()
     student.delete()
   return HttpResponseRedirect(reverse('index'))
+
+
+
 
 
  # Ojt Officers Account
@@ -686,16 +673,16 @@ def contact_form(request):
   if request.method == 'POST':
     name = "Program Advisor"
     email = settings.EMAIL_HOST_USER
-    message = "From: "+ email + "\n" 
-    message += "Sender Name: "+ name + "\n\r\n\r" 
+    message = "From: "+ email + "\n"
+    message += "Sender Name: "+ name + "\n\r\n\r"
     message += "--------------------------------------------------------------------------------------------------------"
     message += "\n\r\n\r"
- 
+
     message += request.POST['message']
     message += "\n\r\n\r"
     message += "http://joseprotacio.pythonanywhere.com/"
 
-    recievers = [student.user.email for student in students] 
+    recievers = [student.user.email for student in students]
 
 
     try:
@@ -712,8 +699,8 @@ def contact_form(request):
       context = {'mail_response':True}
     except Exception as err:
       raise err
- 
-  return render(request,'PA_Views/send_email.html',context) 
+
+  return render(request,'PA_Views/send_email.html',context)
 
 
 # csrf exmpt
@@ -756,7 +743,7 @@ def ojt_index(request):
         else:
             ojtstatus="X"
         student_data.append({'name': name, 'my_id':my_id,'units': units, 'number':number,'middle_initial':middle_initial,'ojtstatus':ojtstatus,'year':year})
-        
+
     numstudent = len(student_data)
 
     count_passed = 0
@@ -772,7 +759,6 @@ def ojt_index(request):
 
 def ojt_student_grades(request, user_id):
     student = Student.objects.get(user_id=user_id)
-
     student_enrollment = get_object_or_404(StudentEnrollment, student=student)
     curriculum = student_enrollment.curriculum
     yearlevels = curriculum.year_levels.all()
@@ -789,9 +775,7 @@ def ojt_student_grades(request, user_id):
     available_subjects = set()
     for subject in Subject.objects.filter(curriculum=curriculum):
       if not subject.prerequisites.all():
-        if get_subject_grade(student, subject) == 0.0:
-          available_subjects.add(subject)
-        elif get_subject_status(student, subject) == 'failed':
+        if get_subject_status(student, subject) != 'failed':
           available_subjects.add(subject)
       else:
         prerequisites_passed = True
@@ -807,11 +791,11 @@ def ojt_student_grades(request, user_id):
     for bad_subjects in Subject.objects.filter(curriculum=curriculum):
       if not bad_subjects.prerequisites.all():
         if get_subject_status (student, bad_subjects) != 'failed':
-          if get_subject_grade(student, bad_subjects) != 0.0:
-            no_subjects.add(bad_subjects)
           if get_subject_status(student, bad_subjects) == 'incomplete':
             no_subjects.add(bad_subjects)
           elif get_subject_status(student, bad_subjects) == 'passed':
+            no_subjects.add(bad_subjects)
+      elif get_subject_grade(student, bad_subjects) != 0.0:
             no_subjects.add(bad_subjects)
       else:
         for prerequisite in bad_subjects.prerequisites.all():
@@ -867,11 +851,52 @@ def check_username_exist(request):
 
 
 def curriculum_list(request):
-  return render(request, 'PA_Views/curriculum_list.html', {
-    'curriculum': Curriculum.objects.all().order_by('-curriculum_year'),
-    'form':CurriculumForm(request.POST),
-  })
+    curriculums = Curriculum.objects.all().order_by('-curriculum_year')
+    form = CurriculumForm(request.POST)
 
+    
+
+
+
+    # Retrieve the list of enrolled students for each curriculum
+    enrolled_students = []
+    for curriculum in curriculums:
+        student_enrollments = StudentEnrollment.objects.filter(curriculum=curriculum)
+        students = [enrollment.student for enrollment in student_enrollments]
+        enrolled_students.append((curriculum, students))
+        
+    count_student_enrollments = StudentEnrollment.objects.filter(curriculum=curriculum)
+    
+    return render(request, 'PA_Views/curriculum_list.html', {
+        'curriculum': curriculums,
+        'form': form,
+        'enrolled_students': enrolled_students,
+        'count_student_enrollments':count_student_enrollments,
+    })
+
+def unenroll_student(request, student_id):
+    student_enrollment = get_object_or_404(StudentEnrollment, student_id=student_id)
+    if request.method == 'POST':
+        curriculum = student_enrollment.curriculum
+        curriculum.students.remove(student_enrollment.student)
+        student_enrollment.delete()
+        return HttpResponseRedirect(reverse('curriculum_list'))
+
+def add_enroll_student(request, curriculum_id):
+    curriculum = Curriculum.objects.get(id=curriculum_id)
+    if request.method == 'POST':
+        student_ids = request.POST.getlist('students')
+        for student_id in student_ids:
+            student = Student.objects.get(user_id=student_id)
+            enrollment, created = StudentEnrollment.objects.get_or_create(student=student, curriculum=curriculum)
+            if created:
+                messages.success(request, f'{student.user.first_name} enrolled in {curriculum.curriculum_year}')
+            else:
+                messages.error(request, f'{student.user.first_name} is already enrolled in {curriculum.curriculum_year}')
+
+        return redirect(reverse('enroll_student', kwargs={'curriculum_id': curriculum_id}))
+    return render(request, 'PA_Views/enroll_student.html',)
+        
 def view_curriculum(request, id):
   curriculum = Curriculum.objects.get(pk=id)
   yearlevel_count = YearLevel.objects.filter(curriculum=curriculum).count()
@@ -934,7 +959,7 @@ def get_total_units_semester(semester):
 
 def curriculum_detail(request, curriculum_id, message=None):
     curriculum = get_object_or_404(Curriculum, pk=curriculum_id)
-    students = Student.objects.all()
+    students = Student.objects.exclude(studentenrollment__isnull=False)
     student_enrollments = StudentEnrollment.objects.filter(curriculum=curriculum)
     enrolled_students = [enrollment.student for enrollment in student_enrollments]
 
@@ -954,7 +979,7 @@ def curriculum_detail(request, curriculum_id, message=None):
     subject_count = Subject.objects.filter(curriculum=curriculum).count()
     total_units = Subject.objects.filter(curriculum=curriculum).aggregate(total_units=Sum('subj_units_lec')+Sum('subj_units_lab'))['total_units']
     return render(request, 'PA_Views/curriculum_details.html', {
-        'curriculum': curriculum, 
+        'curriculum': curriculum,
         'students':students,
         'enrolled_students':enrolled_students,
         'count_enrolled_student':count_enrolled_student,
@@ -966,7 +991,7 @@ def curriculum_detail(request, curriculum_id, message=None):
         'semesters':semesters,
         'calculate_total_units_semester':calculate_total_units_semester,
         'yearlevels':yearlevels,
-        'get_total_units_semester': get_total_units_semester, 
+        'get_total_units_semester': get_total_units_semester,
     })
 
 def delete_subject_from_curriculum(request, curriculum_id, subject_id):
@@ -1093,10 +1118,10 @@ def curriculum_yearlevel(request, yearlevel_id):
   yearlevel_count = YearLevel.objects.filter(curriculum=curriculum).count()
   subject_count = yearlevel.subjects.count()
   total_units = added_subjects.aggregate(total_units=Sum('subj_units_lec')+Sum('subj_units_lab'))['total_units']
-  
+
   return render(request, 'PA_Views/curriculum_year.html', {
     'semester':Semester.objects.filter(year_level=yearlevel).order_by('semester'),
-    'curriculum': curriculum, 
+    'curriculum': curriculum,
     'yearlevel': yearlevel,
     'yearlevel_count':yearlevel_count,
     'subject_count':subject_count,
@@ -1117,9 +1142,9 @@ def curriculum_year_semester(request, semester_id):
   yearlevel_count = YearLevel.objects.filter(curriculum=curriculum).count()
   subject_count = semester.subjects.count()
   total_units = added_subjects.aggregate(total_units=Sum('subj_units_lec')+Sum('subj_units_lab'))['total_units']
-  
+
   return render(request, 'PA_Views/curriculum_year_semester.html', {
-    'curriculum': curriculum, 
+    'curriculum': curriculum,
     'subjects':subjects,
     'yearlevel': yearlevel,
     'semester': semester,
@@ -1139,6 +1164,11 @@ def grade_student(request, user_id):
     enrollment = StudentEnrollment.objects.get(student=student)
     curriculum = enrollment.curriculum
     year_level = YearLevel.objects.filter(curriculum=curriculum)
+
+    yearlevels = curriculum.year_levels.all()
+    yearlevels1 = YearLevel.objects.filter(curriculum=curriculum)
+    semesters = Semester.objects.filter(year_level__in=yearlevels1)
+
     subjects = Subject.objects.filter(curriculum=curriculum).order_by("year_levels")
     subjectgrade = SubjectGrade.objects.filter(curriculum=curriculum, student=student)
 
@@ -1166,6 +1196,9 @@ def grade_student(request, user_id):
     return render(request, 'PA_Views/grade_student.html', {
         'student': student,
         'curriculum': curriculum,
+        'yearlevels':yearlevels,
+        'yearlevels1':yearlevels1,
+        'semesters':semesters,
         'subjects': subjects,
         'subject_grade':subject_grade,
     })
@@ -1253,9 +1286,13 @@ def edit_subject(request, id):
   })
 
 
+@login_required
 def enroll_students(request, curriculum_id):
     curriculum = Curriculum.objects.get(id=curriculum_id)
-    students = Student.objects.all()
+    enrolled_students = StudentEnrollment.objects.filter(curriculum_id=curriculum_id)
+    
+    students = [enrollment.student for enrollment in enrolled_students]
+    not_enrolled_student = Student.objects.exclude(studentenrollment__isnull=False)
     if request.method == 'POST':
         student_ids = request.POST.getlist('students')
         for student_id in student_ids:
@@ -1265,15 +1302,14 @@ def enroll_students(request, curriculum_id):
                 messages.success(request, f'{student.user.first_name} enrolled in {curriculum.curriculum_year}')
             else:
                 messages.error(request, f'{student.user.first_name} is already enrolled in {curriculum.curriculum_year}')
-
-        return redirect(reverse('curriculum_detail', kwargs={'curriculum_id': curriculum_id}))
-
+        return redirect('enroll_students', curriculum_id=curriculum_id)
     context = {
         'curriculum': curriculum,
-        'students': students,
-        'yearlevels':YearLevel.objects.filter(curriculum=curriculum).order_by('year_level'),
+        'enrolled_students': students,
+        'not_enrolled_student':not_enrolled_student,
+
     }
-    return render(request, 'PA_Views/curriculum_details.html', context)
+    return render(request, 'PA_Views/enroll_student.html', context)
 
 def delete_year_curriculum(request, curriculum_id, yearlevel_id):
     if request.method == 'POST':

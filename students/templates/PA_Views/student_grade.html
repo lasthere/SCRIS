@@ -42,7 +42,6 @@
                   <table>
                     <h5 class="table-success" style="padding:5px;">
                       <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-lg">Can Enroll</button>
-                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target=".not-modal">Cannot Enroll</button>
                       <button type="button" class="btn btn-warning" data-toggle="modal" data-target=".inc-modal">Inc Subjects</button>
 
                     </h5>
@@ -112,32 +111,33 @@
                             </tr>
                         {% for semester in yearlevel.semesters.all %}
                           {% if semester.semester == 1 %}
-                          <tr>
-                            <td></td>
-                          </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
                             <tr>
                               <td colspan="7"><strong><u>First Semester</u></strong></td>
+                              <td><strong>{{ semester.total_units }}</strong></td>
                             </tr>
                           {% elif semester.semester == 2 %}
-                          <tr>
-                            <td></td>
-                          </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
                             <tr>
                               <td colspan="7"><strong><u>Second Semester</u></strong></td>
                               <td><strong>{{ semester.total_units }}</strong></td>
                             </tr>
                           {% elif semester.semester == 3 %}
-                          <tr>
-                            <td></td>
-                          </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
                             <tr>
                               <td colspan="7"><strong><u>Third Semester</u></strong></td>
                               <td><strong>{{ semester.total_units }}</strong></td>
                             </tr>
                           {% else %}
-                          <tr>
-                            <td></td>
-                          </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
                             <tr>
                               <td colspan="7"><strong><u>{{ semester.semester }} Semester</u></strong></td>
                               <td><strong>{{ semester.total_units }}</strong></td>
@@ -256,7 +256,7 @@
                         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">
-                                <h5 class="text-center"><strong>List of Possible Subject to Enroll</strong></h5>
+                                <h5 class="text-center"><strong>List of Possible Subject('s) you can Enroll</strong></h5>
                               {% if available_subjects %}
                                 <table class="table">
                                   <thead>
@@ -374,60 +374,6 @@
                           </div>
                         </div>
 
-                        <div class="modal fade not-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <h5 class="text-center"><strong>List of Subject Ineligible to Enroll</strong></h5>
-                              <table class="table">
-                                <thead style="background-color: yellow;" class="text-dark">
-                                  <tr>
-                                    <th>Subject Code</th>
-                                    <th>Subject Name</th>
-                                    <th>Units</th>
-                                    <th>Reason</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% if no_subjects %}
-                                    {% for subject in no_subjects %}
-                                      <tr>
-                                        <td>{{ subject.subj_code }}</td>
-                                        <td>{{ subject.subj_name }}</td>
-                                        <td>{{ subject.subj_units_lec }}/{{ subject.subj_units_lab }}</td>
-                                        <td>
-                                          {% for prerequisite in subject.prerequisites.all %}
-                                            {{ prerequisite.subj_code}}
-                                            {% if student|has_grade:prerequisite %}
-                                                {% if student|get_subject_status:prerequisite == 'passed' %}
-                                                  (Passed)
-                                                {% elif student|get_subject_status:prerequisite == 'failed' %}
-                                                  (Failed)
-                                                {% elif student|get_subject_status:prerequisite == 'incomplete' %}
-                                                  (Inc)
-                                                {% elif student|get_subject_status:prerequisite == 'dropped' %}
-                                                  (Dropped)
-                                                {% elif student|get_subject_status:prerequisite == 'noattendance' %}
-                                                  (No Attendance)
-                                                {% endif %}
-                                                {% elif student|get_subject_status:prerequisite == '' %}
-                                                  N/A
-                                                {% endif %}
-                                            {% empty %}
-                                                {{ student|get_subject_status:subject }}
-                                          {% endfor %}        
-                                        </td>
-                                      </tr>
-                                    {% endfor %}
-                                  {% else %}
-                                    <tr>
-                                      <td>Eligible to take all Subjects</td>
-                                    </tr>
-                                  {% endif %}
-                                  </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
 
                
     </div>
